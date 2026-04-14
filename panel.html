@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Luxor</title>
-    <link rel="stylesheet" href="RECURSOS/styles.css?v=1776186386">
+    <link rel="stylesheet" href="RECURSOS/styles.css?v=1776188261">
     <style>
         /* Título Estilo WordArt Gigante */
         .header-titulo { 
@@ -53,7 +53,7 @@
     
     <div class="header-titulo">
         ESTADÍSTICAS C.M.I 
-        <span id="mes-titulo">MARZO</span>
+        <span id="mes-titulo">ABRIL</span>
     </div>
 
     <div class="panel-azul">
@@ -75,7 +75,7 @@
     <a href="febrero/VICTORIA/REPORTE_VICTORIA_FEBRERO.html" class="card-sucursal">VICTORIA</a>
     <a href="febrero/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_FEBRERO.html" class="card-sucursal">VILLAS DE ARAGUA</a>
 </div>
-<div id="grupo-marzo" class="contenedor-sucursales group-mes" style="display: grid;">
+<div id="grupo-marzo" class="contenedor-sucursales group-mes" style="display: none;">
     <a href="marzo/ACACIAS/REPORTE_ACACIAS_MARZO.html" class="card-sucursal">ACACIAS</a>
     <a href="marzo/BARQUISIMETO/REPORTE_BARQUISIMETO_MARZO.html" class="card-sucursal">BARQUISIMETO</a>
     <a href="marzo/BOSQUE/REPORTE_BOSQUE_MARZO.html" class="card-sucursal">BOSQUE</a>
@@ -92,6 +92,9 @@
     <a href="marzo/VICTORIA/REPORTE_VICTORIA_MARZO.html" class="card-sucursal">VICTORIA</a>
     <a href="marzo/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_MARZO.html" class="card-sucursal">VILLAS DE ARAGUA</a>
 </div>
+<div id="grupo-abril" class="contenedor-sucursales group-mes" style="display: grid;">
+    <a href="abril/ACACIAS/REPORTE_ACACIAS_ABRIL.html" class="card-sucursal">ACACIAS</a>
+</div>
 
         </main>
     </div>
@@ -99,7 +102,8 @@
     <div class="selector-meses">
         <div class="titulo-seccion">HISTORIAL DE EVALUACIONES:</div>
         <button class="btn-mes " onclick="cambiarMes('febrero', this)">febrero</button>
-<button class="btn-mes active" onclick="cambiarMes('marzo', this)">marzo</button>
+<button class="btn-mes " onclick="cambiarMes('marzo', this)">marzo</button>
+<button class="btn-mes active" onclick="cambiarMes('abril', this)">abril</button>
 
     </div>
 
