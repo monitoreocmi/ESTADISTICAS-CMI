@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Luxor</title>
+    <link rel="stylesheet" href="RECURSOS/styles.css?v=1776186386">
+    <style>
+        /* Título Estilo WordArt Gigante */
+        .header-titulo { 
+            text-align: center; 
+            margin: 40px 0; 
+            font-family: 'Arial Black', Gadget, sans-serif;
+            font-size: 65px; /* Tamaño mucho más grande */
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            /* Efecto WordArt: Contorno y Sombra */
+            color: #1A1D4D;
+            -webkit-text-stroke: 2px #F9D908;
+            text-shadow: 4px 4px 0px #0047AB, 8px 8px 15px rgba(0,0,0,0.4);
+            line-height: 1.1;
+        }
+        
+        /* El mes ahora hereda el mismo color y estilo que el título principal */
+        #mes-titulo { 
+            color: #1A1D4D; 
+            -webkit-text-stroke: 2px #F9D908;
+            display: block; /* Salto de línea para mayor impacto */
+            font-size: 80px;
+        }
+        
+        .selector-meses { 
+            width: 92%; 
+            max-width: 1150px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 10px; 
+            margin: 25px auto; 
+            padding: 20px; 
+            background: #f4f4f4; 
+            border-radius: 15px; 
+            border: 1px solid #ccc; 
+        }
+        .btn-mes { padding: 10px 20px; background: #1A1D4D; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .btn-mes:hover { background: #F9D908; color: #1A1D4D; }
+        .btn-mes.active { background: #F9D908; color: #1A1D4D; border: 2px solid #1A1D4D; }
+        .titulo-seccion { width: 100%; text-align: center; color: #1A1D4D; font-weight: 800; margin-bottom: 10px; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <header><img src="RECURSOS/logo.png" alt="LUXOR" class="logo-luxor"></header>
+    
+    <div class="header-titulo">
+        ESTADÍSTICAS C.M.I 
+        <span id="mes-titulo">MARZO</span>
+    </div>
+
+    <div class="panel-azul">
+        <main id="main-container">
+            <div id="grupo-febrero" class="contenedor-sucursales group-mes" style="display: none;">
+    <a href="febrero/ACACIAS/REPORTE_ACACIAS_FEBRERO.html" class="card-sucursal">ACACIAS</a>
+    <a href="febrero/BARQUISIMETO/REPORTE_BARQUISIMETO_FEBRERO.html" class="card-sucursal">BARQUISIMETO</a>
+    <a href="febrero/BOSQUE/REPORTE_BOSQUE_FEBRERO.html" class="card-sucursal">BOSQUE</a>
+    <a href="febrero/CASTAÑO/REPORTE_CASTAÑO_FEBRERO.html" class="card-sucursal">CASTAÑO</a>
+    <a href="febrero/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_FEBRERO.html" class="card-sucursal">CIRCULO MILITAR</a>
+    <a href="febrero/GUACARA/REPORTE_GUACARA_FEBRERO.html" class="card-sucursal">GUACARA</a>
+    <a href="febrero/IPSFA/REPORTE_IPSFA_FEBRERO.html" class="card-sucursal">IPSFA</a>
+    <a href="febrero/MORA/REPORTE_MORA_FEBRERO.html" class="card-sucursal">MORA</a>
+    <a href="febrero/NAGUANAGUA/REPORTE_NAGUANAGUA_FEBRERO.html" class="card-sucursal">NAGUANAGUA</a>
+    <a href="febrero/SAN DIEGO/REPORTE_SAN DIEGO_FEBRERO.html" class="card-sucursal">SAN DIEGO</a>
+    <a href="febrero/SAN JUAN/REPORTE_SAN JUAN_FEBRERO.html" class="card-sucursal">SAN JUAN</a>
+    <a href="febrero/SANTA RITA/REPORTE_SANTA RITA_FEBRERO.html" class="card-sucursal">SANTA RITA</a>
+    <a href="febrero/TUCACAS/REPORTE_TUCACAS_FEBRERO.html" class="card-sucursal">TUCACAS</a>
+    <a href="febrero/VICTORIA/REPORTE_VICTORIA_FEBRERO.html" class="card-sucursal">VICTORIA</a>
+    <a href="febrero/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_FEBRERO.html" class="card-sucursal">VILLAS DE ARAGUA</a>
+</div>
+<div id="grupo-marzo" class="contenedor-sucursales group-mes" style="display: grid;">
+    <a href="marzo/ACACIAS/REPORTE_ACACIAS_MARZO.html" class="card-sucursal">ACACIAS</a>
+    <a href="marzo/BARQUISIMETO/REPORTE_BARQUISIMETO_MARZO.html" class="card-sucursal">BARQUISIMETO</a>
+    <a href="marzo/BOSQUE/REPORTE_BOSQUE_MARZO.html" class="card-sucursal">BOSQUE</a>
+    <a href="marzo/CASTAÑO/REPORTE_CASTAÑO_MARZO.html" class="card-sucursal">CASTAÑO</a>
+    <a href="marzo/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_MARZO.html" class="card-sucursal">CIRCULO MILITAR</a>
+    <a href="marzo/GUACARA/REPORTE_GUACARA_MARZO.html" class="card-sucursal">GUACARA</a>
+    <a href="marzo/IPSFA/REPORTE_IPSFA_MARZO.html" class="card-sucursal">IPSFA</a>
+    <a href="marzo/MORA/REPORTE_MORA_MARZO.html" class="card-sucursal">MORA</a>
+    <a href="marzo/NAGUANAGUA/REPORTE_NAGUANAGUA_MARZO.html" class="card-sucursal">NAGUANAGUA</a>
+    <a href="marzo/SAN DIEGO/REPORTE_SAN DIEGO_MARZO.html" class="card-sucursal">SAN DIEGO</a>
+    <a href="marzo/SAN JUAN/REPORTE_SAN JUAN_MARZO.html" class="card-sucursal">SAN JUAN</a>
+    <a href="marzo/SANTA RITA/REPORTE_SANTA RITA_MARZO.html" class="card-sucursal">SANTA RITA</a>
+    <a href="marzo/TUCACAS/REPORTE_TUCACAS_MARZO.html" class="card-sucursal">TUCACAS</a>
+    <a href="marzo/VICTORIA/REPORTE_VICTORIA_MARZO.html" class="card-sucursal">VICTORIA</a>
+    <a href="marzo/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_MARZO.html" class="card-sucursal">VILLAS DE ARAGUA</a>
+</div>
+
+        </main>
+    </div>
+
+    <div class="selector-meses">
+        <div class="titulo-seccion">HISTORIAL DE EVALUACIONES:</div>
+        <button class="btn-mes " onclick="cambiarMes('febrero', this)">febrero</button>
+<button class="btn-mes active" onclick="cambiarMes('marzo', this)">marzo</button>
+
+    </div>
+
+    <script>
+        function cambiarMes(mes, btn) {
+            document.querySelectorAll('.group-mes').forEach(div => div.style.display = 'none');
+            document.querySelectorAll('.btn-mes').forEach(b => b.classList.remove('active'));
+            document.getElementById('grupo-' + mes).style.display = 'grid';
+            btn.classList.add('active');
+            document.getElementById('mes-titulo').innerText = mes.toUpperCase();
+        }
+    </script>
+</body>
+</html>

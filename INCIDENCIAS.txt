@@ -1,0 +1,28 @@
+    {"cod": "CNG", "Colas no gestionadas"},
+    {"cod": "NZA", "Neveras ó zonas sin abastecer"},
+    {"cod": "DPAC" "Zonas desabastecidas por el personal prev"},
+    {"cod": "AMSA","Apertura de muelle a deshoras sin autorización"},
+    {"cod": "ODAAAP" "Obstaculización de tránsito a clientes y acceso a productos"},
+    {"cod": "CAH", "Cierres antes de la hora"},
+    {"cod": "APH", "Aperturas posterior a la hora"},
+    {"cod": "ASP", "Exhibición o área sin personal"},
+    {"cod": "UIH", "Uso indebido de herramientas"},   
+    {"cod": "AF",  "Anaquel Frenteado"},
+    {"cod": "MSP", "Mantenimiento sin perímetro"},
+    {"cod": "FFG", "Falla frigorífica"},
+    {"cod": "NSI", "Neveras sin iluminación"},
+    {"cod": "GSA", "Gourmet sin abastecer"}
+
+
+LAS FOTOS SE DEN GUARDAR CON EL SIGUIENTE FORMATO
+ 
+CODIGO DE INCIDENCI+ FECHA+ NUMERO
+EJEMPLO
+CNG.01.04.2026.1
+NZA.01.04.2026.2
+
+LAS FOTOS DEBEN IR EN LA CARPETA DEL MES EN CURSO Y DENTRO DE ESA CARPETA DEBE ESTAR LA SUCURSAL
+
+EJEMPLO
+
+ABRIL/ACACIAS/CNG.01.04.2026.1
