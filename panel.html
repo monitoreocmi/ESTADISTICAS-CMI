@@ -3,62 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Luxor</title>
-    <link rel="stylesheet" href="RECURSOS/styles.css?v=1776970898">
+    <link rel="stylesheet" href="RECURSOS/styles.css?v=1776975924">
     <style>
-        /* Título Estilo WordArt Gigante */
-        .header-titulo { 
-            text-align: center; 
-            margin: 40px 0; 
-            font-family: 'Arial Black', Gadget, sans-serif;
-            font-size: 65px; /* Tamaño mucho más grande */
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            /* Efecto WordArt: Contorno y Sombra */
-            color: #1A1D4D;
-            -webkit-text-stroke: 2px #F9D908;
-            text-shadow: 4px 4px 0px #0047AB, 8px 8px 15px rgba(0,0,0,0.4);
-            line-height: 1.1;
-        }
-        
-        /* El mes ahora hereda el mismo color y estilo que el título principal */
-        #mes-titulo { 
-            color: #1A1D4D; 
-            -webkit-text-stroke: 2px #F9D908;
-            display: block; /* Salto de línea para mayor impacto */
-            font-size: 80px;
-        }
-        
-        .selector-meses { 
-            width: 92%; 
-            max-width: 1150px; 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            gap: 10px; 
-            margin: 25px auto; 
-            padding: 20px; 
-            background: #f4f4f4; 
-            border-radius: 15px; 
-            border: 1px solid #ccc; 
-        }
+        .header-titulo { text-align: center; margin: 40px 0; font-family: 'Arial Black', Gadget, sans-serif; font-size: 65px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; color: #1A1D4D; -webkit-text-stroke: 2px #F9D908; text-shadow: 4px 4px 0px #0047AB, 8px 8px 15px rgba(0,0,0,0.4); line-height: 1.1; }
+        #mes-titulo { color: #1A1D4D; -webkit-text-stroke: 2px #F9D908; display: block; font-size: 80px; }
+        .selector-meses { width: 92%; max-width: 1150px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px auto; padding: 20px; background: #f4f4f4; border-radius: 15px; border: 1px solid #ccc; }
         .btn-mes { padding: 10px 20px; background: #1A1D4D; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
         .btn-mes:hover { background: #F9D908; color: #1A1D4D; }
         .btn-mes.active { background: #F9D908; color: #1A1D4D; border: 2px solid #1A1D4D; }
         .titulo-seccion { width: 100%; text-align: center; color: #1A1D4D; font-weight: 800; margin-bottom: 10px; font-size: 1.1rem; }
     </style>
+    
+    <style>
+        .btn-reporte-general { 
+            display: block; 
+            margin: 0 auto 20px auto; 
+            background: #0047AB; 
+            color: white; 
+            border: 3px solid #F9D908; 
+            padding: 12px 25px; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+            transition: 0.3s; 
+            font-size: 0.9rem; 
+        }
+        .btn-reporte-general:hover { background: #F9D908; color: #1A1D4D; transform: scale(1.05); }
+        .modal-ranking { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); }
+        .modal-content-ranking { background: white; margin: 5% auto; padding: 25px; width: 380px; border-radius: 15px; border: 5px solid #1A1D4D; position: relative; }
+        .tabla-ranking { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .tabla-ranking th { background: #1A1D4D; color: white; padding: 10px; text-align: left; }
+        .tabla-ranking td { padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; color: #1A1D4D; }
+        .close-rank { position: absolute; right: 15px; top: 10px; font-size: 30px; cursor: pointer; color: #E61E25; font-weight: bold; }
+    </style>
+
+    <div id="modalRanking" class="modal-ranking">
+        <div class="modal-content-ranking">
+            <span class="close-rank" onclick="cerrarRanking()">&times;</span>
+            <h2 style="text-align:center; color:#1A1D4D; margin:0; border-bottom: 3px solid #F9D908; padding-bottom: 10px;">Cantidad de Incidencias</h2>
+            <small id="titulo-ranking-mes" style="text-align:center; display:block; color:#E61E25; font-weight:bold; margin-top:5px;"></small>
+            <table class="tabla-ranking">
+                <thead><tr><th>SUCURSAL</th><th style="text-align:right;">INCIDENCIAS</th></tr></thead>
+                <tbody id="cuerpoRanking"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const DATOS_REALES = {"febrero": {"ACACIAS": 50, "BARQUISIMETO": 23, "BOSQUE": 46, "CASTA\u00d1O": 10, "CIRCULO MILITAR": 52, "GUACARA": 59, "IPSFA": 62, "MORA": 22, "NAGUANAGUA": 55, "SAN DIEGO": 101, "SAN JUAN": 73, "SANTA RITA": 42, "TUCACAS": 13, "VICTORIA": 78, "VILLAS DE ARAGUA": 74}, "marzo": {"ACACIAS": 19, "BARQUISIMETO": 11, "BOSQUE": 36, "CASTA\u00d1O": 3, "CIRCULO MILITAR": 44, "GUACARA": 41, "IPSFA": 29, "MORA": 8, "NAGUANAGUA": 39, "SAN DIEGO": 86, "SAN JUAN": 61, "SANTA RITA": 23, "TUCACAS": 7, "VICTORIA": 56, "VILLAS DE ARAGUA": 23}, "abril": {"ACACIAS": 9, "BARQUSIMETO": 7, "BOSQUE": 30, "CASTA\u00d1O": 2, "CIRCULO MILITAR": 24, "GUACARA": 35, "IPSFA": 27, "MORA": 5, "NAGUANAGUA": 30, "SAN DIEGO": 52, "SAN JUAN": 40, "SANTA RITA": 26, "TUCACAS": 3, "VICTORIA": 66, "VILLAS": 12}};
+        function abrirRanking() {
+            const mesActual = document.getElementById('mes-titulo').innerText.toLowerCase();
+            document.getElementById('titulo-ranking-mes').innerText = "MES: " + mesActual.toUpperCase();
+            let lista = [];
+            if (DATOS_REALES[mesActual]) {
+                Object.keys(DATOS_REALES[mesActual]).forEach(suc => {
+                    lista.push({ nombre: suc, total: DATOS_REALES[mesActual][suc] });
+                });
+            }
+            lista.sort((a, b) => b.total - a.total);
+            const cuerpo = document.getElementById('cuerpoRanking');
+            if (lista.length > 0) {
+                cuerpo.innerHTML = lista.map(i => 
+                    `<tr><td>${i.nombre}</td><td style="text-align:right; color:#E61E25;">${i.total}</td></tr>`
+                ).join('');
+            } else {
+                cuerpo.innerHTML = '<tr><td colspan="2" style="text-align:center;">No hay datos en el JSON</td></tr>';
+            }
+            document.getElementById('modalRanking').style.display = "block";
+        }
+        function cerrarRanking() { document.getElementById('modalRanking').style.display = "none"; }
+    </script>
+        
 </head>
 <body>
     <header><img src="RECURSOS/logo.png" alt="LUXOR" class="logo-luxor"></header>
+    <div class="header-titulo">ESTADÍSTICAS C.M.I <span id="mes-titulo">ABRIL</span></div>
     
-    <div class="header-titulo">
-        ESTADÍSTICAS C.M.I 
-        <span id="mes-titulo">ABRIL</span>
-    </div>
+    <button class="btn-reporte-general" onclick="abrirRanking()">📊 Total de incidencias por mes</button>
 
-    <div class="panel-azul">
-        <main id="main-container">
-            <div id="grupo-febrero" class="contenedor-sucursales group-mes" style="display: none;">
+    <div class="panel-azul"><main id="main-container"><div id="grupo-febrero" class="contenedor-sucursales group-mes" style="display: none;">
     <a href="febrero/ACACIAS/REPORTE_ACACIAS_FEBRERO.html" class="card-sucursal">ACACIAS</a>
     <a href="febrero/BARQUISIMETO/REPORTE_BARQUISIMETO_FEBRERO.html" class="card-sucursal">BARQUISIMETO</a>
     <a href="febrero/BOSQUE/REPORTE_BOSQUE_FEBRERO.html" class="card-sucursal">BOSQUE</a>
@@ -109,18 +134,11 @@
     <a href="abril/VICTORIA/REPORTE_VICTORIA_ABRIL.html" class="card-sucursal">VICTORIA</a>
     <a href="abril/VILLAS/REPORTE_VILLAS_ABRIL.html" class="card-sucursal">VILLAS</a>
 </div>
-
-        </main>
-    </div>
-
-    <div class="selector-meses">
-        <div class="titulo-seccion">HISTORIAL DE EVALUACIONES:</div>
-        <button class="btn-mes " onclick="cambiarMes('febrero', this)">febrero</button>
+</main></div>
+    <div class="selector-meses"><div class="titulo-seccion">HISTORIAL DE EVALUACIONES:</div><button class="btn-mes " onclick="cambiarMes('febrero', this)">febrero</button>
 <button class="btn-mes " onclick="cambiarMes('marzo', this)">marzo</button>
 <button class="btn-mes active" onclick="cambiarMes('abril', this)">abril</button>
-
-    </div>
-
+</div>
     <script>
         function cambiarMes(mes, btn) {
             document.querySelectorAll('.group-mes').forEach(div => div.style.display = 'none');

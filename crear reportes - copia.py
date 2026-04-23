@@ -2,7 +2,6 @@ import os
 import sys
 import math
 import shutil
-import json  # Nuevo: para guardar el ID de datos
 from datetime import datetime
 
 # --- DATOS OFICIALES C.M.I. FEBRERO 2026 ---
@@ -74,9 +73,6 @@ def ejecutar_reportes():
         os.chdir(ruta_base)
         print("\n" + "="*60 + "\n🚀 GENERADOR LUXOR - DEPURACIÓN ACTIVADA\n" + "="*60)
 
-        # Diccionario para almacenar los datos del ranking
-        id_ranking_datos = {}
-
         # 1. Limpieza 6 meses
         fecha_hoy = datetime.now()
         conservar = [MESES_ORDENADOS[(fecha_hoy.month - 1 - i) % 12] for i in range(6)]
@@ -88,13 +84,12 @@ def ejecutar_reportes():
 
         for idx_m, mes_n in enumerate(meses_existentes):
             print(f"\n📂 PROCESANDO MES: {mes_n.upper()}")
-            id_ranking_datos[mes_n.lower()] = {} # Inicializar mes en el ranking
-            
             ruta_mes = os.path.join(ruta_base, mes_n)
             sucursales = [d for d in os.listdir(ruta_mes) if os.path.isdir(os.path.join(ruta_mes, d))]
 
             for suc in sucursales:
                 print(f"   |-- Sucursal: {suc}")
+                # DEFINICIÓN EXPLÍCITA DE RUTA_SUC
                 ruta_suc = os.path.join(ruta_mes, suc)
                 suc_upper = suc.upper()
                 v_p = 6.66 if suc_upper in SUCURSALES_GOURMET else 7.14
@@ -113,9 +108,6 @@ def ejecutar_reportes():
                             c = len([f for f in os.listdir(p_fotos) if f.upper().startswith(inc['cod']) and f.lower().endswith(('.png','.jpg','.jpeg'))]) if os.path.exists(p_fotos) else 0
                         hist.append(c); totales_meses[i_m] += c
                     datos_filas.append({"desc": inc['desc'], "cod": inc['cod'], "hist": hist})
-
-                # GUARDAR TOTAL PARA EL RANKING (Mes actual de la iteración)
-                id_ranking_datos[mes_n.lower()][suc_upper] = totales_meses[idx_m]
 
                 suma_azul = sum(v_p for it in datos_filas if idx_m == 0 or it['hist'][idx_m] <= min(it['hist'][:idx_m])) + (v_p if idx_m == 0 or totales_meses[idx_m] <= min(totales_meses[:idx_m]) else 0)
                 res_final = min(100, math.ceil(suma_azul / 5) * 5)
@@ -149,18 +141,39 @@ def ejecutar_reportes():
 
                 f_total = f"<tr class='fila-total'><td>TOTAL</td>" + "".join([f"<td class='{'azul' if (i>0 and t<=min(totales_meses[:i])) else ('' if i==0 else 'rojo')}'>{t}</td>" for i, t in enumerate(totales_meses)]) + f"<td>{v_p}%</td></tr>"
                 
+                # GENERACIÓN DEL REPORTE CON VARIABLES PROCESADAS (USO DE f"")
                 nombre_archivo = f"REPORTE_{suc_upper}_{mes_n.upper()}.html"
                 ruta_final_html = os.path.join(ruta_suc, nombre_archivo)
+                
                 header_meses = "".join([f"<th>{m.upper()}</th>" for m in meses_existentes[:idx_m+1]])
                 
                 with open(ruta_final_html, "w", encoding="utf-8") as fr:
-                    fr.write(f"""<html><head><meta charset='UTF-8'>{CSS_BASE}</head><body><img src='../../RECURSOS/logo.png' class='logo'><div class='report-container'><h1 class='report-title'>DATOS CLAVES - {suc} ({mes_n.upper()})</h1><table><thead><tr><th>Incidencia</th>{header_meses}<th></th><th></th></tr></thead><tbody>{filas_html}{f_total}</tbody></table><div class='botones-footer'><a href='../../panel.html' class='btn-volver'><i class='fas fa-home'></i> Menú Principal</a></div></div></body></html>""")
+                    fr.write(f"""<html><head><meta charset='UTF-8'>{CSS_BASE}</head>
+                    <body>
+                        <img src='../../RECURSOS/logo.png' class='logo'>
+                        <div class='report-container'>
+                            <h1 class='report-title'>DATOS CLAVES - {suc} ({mes_n.upper()})</h1>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Incidencia</th>
+                                        {header_meses}
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filas_html}
+                                    {f_total}
+                                </tbody>
+                            </table>
+                            <div class='botones-footer'>
+                                <a href='../../panel.html' class='btn-volver'><i class='fas fa-home'></i> Menú Principal</a>
+                            </div>
+                        </div>
+                    </body></html>""")
 
-        # --- GUARDAR EL ARCHIVO DE DATOS PARA EL RANKING ---
-        with open("datos_ranking.json", "w", encoding="utf-8") as jf:
-            json.dump(id_ranking_datos, jf, indent=4)
-
-        print("\n" + "="*60 + "\n✅ REPORTES Y DATOS DE RANKING GENERADOS CORRECTAMENTE\n" + "="*60)
+        print("\n" + "="*60 + "\n✅ TABLAS REPARADAS Y ERRORES DE RUTA SOLUCIONADOS\n" + "="*60)
     except Exception as e: 
         print(f"\n❌ ERROR: {e}")
     input("\nPresiona Enter para cerrar...")

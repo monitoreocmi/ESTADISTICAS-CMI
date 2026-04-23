@@ -1,0 +1,53 @@
+{
+    "febrero": {
+        "ACACIAS": 50,
+        "BARQUISIMETO": 23,
+        "BOSQUE": 46,
+        "CASTA\u00d1O": 10,
+        "CIRCULO MILITAR": 52,
+        "GUACARA": 59,
+        "IPSFA": 62,
+        "MORA": 22,
+        "NAGUANAGUA": 55,
+        "SAN DIEGO": 101,
+        "SAN JUAN": 73,
+        "SANTA RITA": 42,
+        "TUCACAS": 13,
+        "VICTORIA": 78,
+        "VILLAS DE ARAGUA": 74
+    },
+    "marzo": {
+        "ACACIAS": 19,
+        "BARQUISIMETO": 11,
+        "BOSQUE": 36,
+        "CASTA\u00d1O": 3,
+        "CIRCULO MILITAR": 44,
+        "GUACARA": 41,
+        "IPSFA": 29,
+        "MORA": 8,
+        "NAGUANAGUA": 39,
+        "SAN DIEGO": 86,
+        "SAN JUAN": 61,
+        "SANTA RITA": 23,
+        "TUCACAS": 7,
+        "VICTORIA": 56,
+        "VILLAS DE ARAGUA": 23
+    },
+    "abril": {
+        "ACACIAS": 9,
+        "BARQUSIMETO": 7,
+        "BOSQUE": 30,
+        "CASTA\u00d1O": 2,
+        "CIRCULO MILITAR": 24,
+        "GUACARA": 35,
+        "IPSFA": 27,
+        "MORA": 5,
+        "NAGUANAGUA": 30,
+        "SAN DIEGO": 52,
+        "SAN JUAN": 40,
+        "SANTA RITA": 26,
+        "TUCACAS": 3,
+        "VICTORIA": 66,
+        "VILLAS": 12
+    }
+}
