@@ -1,0 +1,28 @@
+<html><head><meta charset='UTF-8'>
+<style>
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background-color: #0047AB; color: #1A1D4D; }
+    .logo { width: 120px; height: auto; position: absolute; top: 15px; left: 15px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+    .report-container { max-width: 1200px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-bottom: 8px solid #F9D908; }
+    .report-title { text-align: center; font-size: 28px; color: #1A1D4D; margin-bottom: 30px; text-transform: uppercase; font-weight: 800; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; table-layout: auto; }
+    th { background-color: #1A1D4D; color: white; padding: 12px; text-transform: uppercase; font-size: 0.85rem; white-space: nowrap; }
+    td { border: 1px solid #ddd; padding: 10px; text-align: center; font-weight: bold; font-size: 0.9rem; }
+    .col-incidencia { text-align: left; width: 30%; min-width: 200px; }
+    .fila-total { color: #1A1D4D !important; font-size: 1.1rem; border-top: 2px solid #1A1D4D; }
+    .rojo { background-color: #E61E25 !important; color: white !important; }
+    .azul { background-color: #00B0F0 !important; color: white !important; }
+    .score-final { font-size: 3.5rem !important; vertical-align: middle; font-weight: 900; }
+    .botones-footer { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+    .btn-volver { background-color: #1A1D4D; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: bold; border: 2px solid #F9D908; cursor: pointer; }
+    .btn-volver:hover { background-color: #F9D908; color: #1A1D4D; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+    .gallery-card { background: #f4f4f4; border-radius: 10px; overflow: hidden; border: 2px solid #ddd; text-align: center; }
+    .img-container { height: 180px; width: 100%; cursor: pointer; }
+    .img-container img { width: 100%; height: 100%; object-fit: cover; }
+    .date-label { padding: 8px; font-size: 0.85rem; color: #555; font-weight: bold; background: #fff; border-top: 1px solid #eee; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+    .modal-content { max-width: 90%; max-height: 90%; border: 5px solid white; border-radius: 10px; }
+    .close-modal { position: absolute; top: 20px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; }
+</style>
+</head><body><div class='report-container'><h1 class='report-title'>Neveras ó zonas sin abastecer (FEBRERO)</h1><div class='gallery-grid'><div class='gallery-card'><div class='img-container' onclick='openModal("NZA_02-2026_1.jpg")'><img src='NZA_02-2026_1.jpg'></div><div class='date-label'>_02-2026_1</div></div></div><div class='botones-footer'><a href='../../abril/TUCACAS/REPORTE_TUCACAS_ABRIL.html' class='btn-volver'><i class='fas fa-arrow-left'></i> Volver</a></div></div><div id='myModal' class='modal'><span class='close-modal' onclick='closeModal()'>&times;</span><img class='modal-content' id='img01'></div><script>function openModal(imgSrc){const m=document.getElementById('myModal');const i=document.getElementById('img01');m.style.display='flex';i.src=imgSrc;} function closeModal(){document.getElementById('myModal').style.display='none';} window.onclick=function(e){if(e.target==document.getElementById('myModal'))closeModal();}</script></body></html>

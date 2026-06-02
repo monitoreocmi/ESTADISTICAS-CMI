@@ -1,0 +1,5 @@
+
+/* Este archivo está vacío, solo para evitar el error 404 */
+body {
+    background-color: #0047AB;
+}

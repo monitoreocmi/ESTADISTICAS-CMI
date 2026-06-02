@@ -1,0 +1,25 @@
+
+body { background-color: #FFFFFF; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+header { margin-top: 20px; margin-bottom: 30px; }
+.logo-luxor { height: 100px; width: auto; }
+
+.panel-azul { 
+    background-color: #0047AB; 
+    padding: 45px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+    max-width: 1150px; 
+    width: 92%; 
+    border-bottom: 10px solid #F9D908; 
+    box-sizing: border-box; 
+    margin-bottom: 30px;
+}
+
+.titulo-mes { color: white; text-align: center; text-transform: uppercase; margin-bottom: 25px; font-size: 1.8rem; border-bottom: 2px solid #F9D908; padding-bottom: 10px; font-weight: 800; }
+.contenedor-sucursales { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+.card-sucursal { background-color: #FFFFFF; border-radius: 12px; padding: 35px 15px; text-align: center; text-decoration: none; color: #1A1D4D; font-weight: 800; font-size: 1.2rem; transition: all 0.2s ease-in-out; display: flex; justify-content: center; align-items: center; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 3px solid transparent; min-height: 80px; }
+.card-sucursal:hover { background-color: #F9D908; border-color: #E61E25; transform: translateY(-3px); }
+
+.selector-meses { width: 92%; max-width: 1150px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 20px; padding: 25px; background: #f0f0f0; border-radius: 20px; border: 1px solid #ddd; }
+.btn-mes { padding: 12px 24px; background-color: #1A1D4D; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; transition: 0.3s; }
+.btn-mes:hover, .btn-mes.active { background-color: #F9D908; color: #1A1D4D; transform: scale(1.05); }

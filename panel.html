@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Luxor</title>
+    <link rel="stylesheet" href="RECURSOS/styles.css?v=1780347852">
+    <style>
+        .header-titulo { text-align: center; margin: 20px 0; font-family: 'Arial Black', sans-serif; font-weight: 900; text-transform: uppercase; color: #1A1D4D; -webkit-text-stroke: 1.5px #F9D908; text-shadow: 3px 3px 0px #0047AB; line-height: 1.1; font-size: clamp(24px, 7vw, 60px); }
+        #mes-titulo { display: block; color: #1A1D4D; -webkit-text-stroke: 1.5px #F9D908; font-size: clamp(32px, 10vw, 75px); }
+        .selector-meses { width: 92%; max-width: 1150px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px auto; padding: 15px; background: #f4f4f4; border-radius: 15px; border: 1px solid #ccc; }
+        .btn-mes { padding: 8px 16px; background: #1A1D4D; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-mes.active { background: #F9D908; color: #1A1D4D; border: 2px solid #1A1D4D; }
+        .titulo-seccion { width: 100%; text-align: center; color: #1A1D4D; font-weight: 800; margin-bottom: 8px; font-size: 1rem; }
+        .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+        .tab-btn { background: #e0e0e0; color: #1A1D4D; border: 2px solid #1A1D4D; padding: 10px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; }
+        .tab-btn.active { background: #1A1D4D; color: white; }
+        .semanas-subselector { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .btn-semana { background: #1A1D4D; color: white; border: 2px solid white; padding: 8px 15px; font-weight: bold; border-radius: 5px; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
+        .btn-semana.active { background: #F9D908; color: #1A1D4D; border-color: #1A1D4D; }
+        .porcentaje-card { display: block; font-size: 1.4rem; font-weight: 900; margin-top: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+    </style>
+    
+    <style>
+        .btn-reporte-general { 
+            display: block; margin: 0 auto 20px auto; background: #0047AB; color: white; 
+            border: 3px solid #F9D908; padding: 12px 25px; border-radius: 12px; 
+            font-weight: bold; cursor: pointer; text-transform: uppercase; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; font-size: 0.9rem; 
+        }
+        .modal-ranking { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; }
+        .modal-content-ranking { background: white; margin: 5% auto; padding: 25px; width: 90%; max-width: 400px; border-radius: 15px; border: 5px solid #1A1D4D; position: relative; }
+        .tabla-ranking { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .tabla-ranking th { background: #1A1D4D; color: white; padding: 10px; text-align: left; font-size: 0.8rem; }
+        .tabla-ranking td { padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; color: #1A1D4D; }
+        .link-incidencia { color: #E61E25; text-decoration: none; font-weight: bold; padding: 5px; display: block; text-align: right; }
+        .link-incidencia:hover { background: #f0f0f0; border-radius: 5px; }
+        .close-rank { position: absolute; right: 15px; top: 10px; font-size: 30px; cursor: pointer; color: #E61E25; font-weight: bold; }
+    </style>
+
+    <div id="modalRanking" class="modal-ranking">
+        <div class="modal-content-ranking">
+            <span class="close-rank" onclick="cerrarRanking()">&times;</span>
+            <h2 style="text-align:center; color:#1A1D4D; margin:0; font-size:1.2rem; border-bottom: 3px solid #F9D908; padding-bottom: 10px;">Cantidad de Incidencias</h2>
+            <small id="titulo-ranking-mes" style="text-align:center; display:block; color:#E61E25; font-weight:bold; margin-top:5px;"></small>
+            <table class="tabla-ranking">
+                <thead><tr><th>SUCURSAL</th><th style="text-align:right;">PUNTOS</th></tr></thead>
+                <tbody id="cuerpoRanking"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const DATOS_REALES = {"febrero": {"mensual": {"ACACIAS": 50, "BARQUISIMETO": 23, "BOSQUE": 46, "CASTA\u00d1O": 10, "CIRCULO MILITAR": 52, "GUACARA": 59, "IPSFA": 62, "MORA": 22, "NAGUANAGUA": 55, "SAN DIEGO": 101, "SAN JUAN": 73, "SANTA RITA": 42, "TUCACAS": 13, "VICTORIA": 78, "VILLAS DE ARAGUA": 74}, "semanas": {"semana1": {"ACACIAS": 65, "BARQUISIMETO": 75, "BOSQUE": 60, "CASTA\u00d1O": 80, "CIRCULO MILITAR": 55, "GUACARA": 70, "IPSFA": 55, "MORA": 75, "NAGUANAGUA": 60, "SAN DIEGO": 70, "SAN JUAN": 60, "SANTA RITA": 65, "TUCACAS": 75, "VICTORIA": 65, "VILLAS DE ARAGUA": 90}, "semana2": {"ACACIAS": 100, "BARQUISIMETO": 100, "BOSQUE": 100, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 100, "GUACARA": 100, "IPSFA": 100, "MORA": 100, "NAGUANAGUA": 100, "SAN DIEGO": 100, "SAN JUAN": 100, "SANTA RITA": 100, "TUCACAS": 100, "VICTORIA": 100, "VILLAS DE ARAGUA": 100}, "semana3": {"ACACIAS": 100, "BARQUISIMETO": 100, "BOSQUE": 100, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 100, "GUACARA": 100, "IPSFA": 100, "MORA": 100, "NAGUANAGUA": 100, "SAN DIEGO": 100, "SAN JUAN": 100, "SANTA RITA": 100, "TUCACAS": 100, "VICTORIA": 100, "VILLAS DE ARAGUA": 100}, "semana4": {"ACACIAS": 100, "BARQUISIMETO": 100, "BOSQUE": 100, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 100, "GUACARA": 100, "IPSFA": 100, "MORA": 100, "NAGUANAGUA": 100, "SAN DIEGO": 75, "SAN JUAN": 100, "SANTA RITA": 100, "TUCACAS": 100, "VICTORIA": 100, "VILLAS DE ARAGUA": 80}, "semana5": {"ACACIAS": 100, "BARQUISIMETO": 100, "BOSQUE": 100, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 100, "GUACARA": 100, "IPSFA": 100, "MORA": 100, "NAGUANAGUA": 100, "SAN DIEGO": 100, "SAN JUAN": 100, "SANTA RITA": 100, "TUCACAS": 100, "VICTORIA": 100, "VILLAS DE ARAGUA": 100}}}, "marzo": {"mensual": {"ACACIAS": 19, "BARQUISIMETO": 11, "BOSQUE": 36, "CASTA\u00d1O": 3, "CIRCULO MILITAR": 44, "GUACARA": 41, "IPSFA": 29, "MORA": 8, "NAGUANAGUA": 39, "SAN DIEGO": 86, "SAN JUAN": 61, "SANTA RITA": 23, "TUCACAS": 7, "VICTORIA": 56, "VILLAS DE ARAGUA": 23}, "semanas": {"semana1": {"ACACIAS": 80, "BARQUISIMETO": 90, "BOSQUE": 80, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 90, "GUACARA": 75, "IPSFA": 80, "MORA": 80, "NAGUANAGUA": 80, "SAN DIEGO": 80, "SAN JUAN": 75, "SANTA RITA": 80, "TUCACAS": 90, "VICTORIA": 80, "VILLAS DE ARAGUA": 60}, "semana2": {"ACACIAS": 80, "BARQUISIMETO": 80, "BOSQUE": 75, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 90, "GUACARA": 75, "IPSFA": 90, "MORA": 90, "NAGUANAGUA": 80, "SAN DIEGO": 75, "SAN JUAN": 90, "SANTA RITA": 90, "TUCACAS": 80, "VICTORIA": 90, "VILLAS DE ARAGUA": 90}, "semana3": {"ACACIAS": 90, "BARQUISIMETO": 90, "BOSQUE": 60, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 75, "GUACARA": 75, "IPSFA": 90, "MORA": 90, "NAGUANAGUA": 70, "SAN DIEGO": 60, "SAN JUAN": 75, "SANTA RITA": 90, "TUCACAS": 90, "VICTORIA": 75, "VILLAS DE ARAGUA": 80}, "semana4": {"ACACIAS": 90, "BARQUISIMETO": 90, "BOSQUE": 75, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 80, "GUACARA": 90, "IPSFA": 80, "MORA": 90, "NAGUANAGUA": 75, "SAN DIEGO": 70, "SAN JUAN": 75, "SANTA RITA": 90, "TUCACAS": 80, "VICTORIA": 80, "VILLAS DE ARAGUA": 90}, "semana5": {"ACACIAS": 100, "BARQUISIMETO": 100, "BOSQUE": 100, "CASTA\u00d1O": 100, "CIRCULO MILITAR": 80, "GUACARA": 75, "IPSFA": 90, "MORA": 100, "NAGUANAGUA": 90, "SAN DIEGO": 90, "SAN JUAN": 90, "SANTA RITA": 90, "TUCACAS": 100, "VICTORIA": 90, "VILLAS DE ARAGUA": 100}}}, "abril": {"mensual": {"ACACIAS": 17, "BARQUSIMETO": 12, "BOSQUE": 46, "CASTA\u00d1O": 5, "CIRCULO MILITAR": 50, "GUACARA": 43, "IPSFA": 44, "MORA": 7, "NAGUANAGUA": 47, "SAN DIEGO": 79, "SAN JUAN": 62, "SANTA RITA": 40, "TUCACAS": 5, "VICTORIA": 95, "VILLAS": 19}, "semanas": {"semana1": {"ACACIAS": 80, "BARQUSIMETO": 80, "BOSQUE": 75, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 70, "GUACARA": 75, "IPSFA": 75, "MORA": 80, "NAGUANAGUA": 70, "SAN DIEGO": 75, "SAN JUAN": 80, "SANTA RITA": 75, "TUCACAS": 100, "VICTORIA": 80, "VILLAS": 80}, "semana2": {"ACACIAS": 80, "BARQUSIMETO": 90, "BOSQUE": 80, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 80, "GUACARA": 80, "IPSFA": 75, "MORA": 80, "NAGUANAGUA": 90, "SAN DIEGO": 90, "SAN JUAN": 75, "SANTA RITA": 90, "TUCACAS": 80, "VICTORIA": 65, "VILLAS": 75}, "semana3": {"ACACIAS": 80, "BARQUSIMETO": 90, "BOSQUE": 75, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 90, "GUACARA": 80, "IPSFA": 75, "MORA": 90, "NAGUANAGUA": 80, "SAN DIEGO": 75, "SAN JUAN": 80, "SANTA RITA": 80, "TUCACAS": 100, "VICTORIA": 75, "VILLAS": 90}, "semana4": {"ACACIAS": 75, "BARQUSIMETO": 90, "BOSQUE": 70, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 80, "GUACARA": 80, "IPSFA": 80, "MORA": 90, "NAGUANAGUA": 80, "SAN DIEGO": 90, "SAN JUAN": 75, "SANTA RITA": 80, "TUCACAS": 100, "VICTORIA": 75, "VILLAS": 75}, "semana5": {"ACACIAS": 100, "BARQUSIMETO": 100, "BOSQUE": 90, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 90, "GUACARA": 90, "IPSFA": 80, "MORA": 100, "NAGUANAGUA": 80, "SAN DIEGO": 75, "SAN JUAN": 80, "SANTA RITA": 90, "TUCACAS": 80, "VICTORIA": 90, "VILLAS": 90}}}, "mayo": {"mensual": {"ACACIAS": 20, "BARQUISIMETO": 19, "BOSQUE": 53, "CASTA\u00d1O": 10, "CIRCULO MILITAR": 88, "GUACARA": 22, "IPSFA": 28, "MORA": 24, "NAGUANAGUA": 35, "SAN DIEGO": 95, "SAN JUAN": 69, "SANTA RITA": 38, "TUCACAS": 9, "VICTORIA": 70, "VILLAS DE ARAGUA": 14}, "semanas": {"semana1": {"ACACIAS": 90, "BARQUISIMETO": 100, "BOSQUE": 75, "CASTA\u00d1O": 80, "CIRCULO MILITAR": 80, "GUACARA": 80, "IPSFA": 80, "MORA": 90, "NAGUANAGUA": 75, "SAN DIEGO": 75, "SAN JUAN": 90, "SANTA RITA": 80, "TUCACAS": 90, "VICTORIA": 75, "VILLAS DE ARAGUA": 90}, "semana2": {"ACACIAS": 90, "BARQUISIMETO": 90, "BOSQUE": 75, "CASTA\u00d1O": 80, "CIRCULO MILITAR": 70, "GUACARA": 90, "IPSFA": 80, "MORA": 80, "NAGUANAGUA": 75, "SAN DIEGO": 70, "SAN JUAN": 75, "SANTA RITA": 80, "TUCACAS": 100, "VICTORIA": 75, "VILLAS DE ARAGUA": 80}, "semana3": {"ACACIAS": 80, "BARQUISIMETO": 80, "BOSQUE": 70, "CASTA\u00d1O": 80, "CIRCULO MILITAR": 70, "GUACARA": 80, "IPSFA": 80, "MORA": 90, "NAGUANAGUA": 90, "SAN DIEGO": 80, "SAN JUAN": 75, "SANTA RITA": 80, "TUCACAS": 80, "VICTORIA": 80, "VILLAS DE ARAGUA": 90}, "semana4": {"ACACIAS": 90, "BARQUISIMETO": 80, "BOSQUE": 80, "CASTA\u00d1O": 90, "CIRCULO MILITAR": 80, "GUACARA": 80, "IPSFA": 75, "MORA": 90, "NAGUANAGUA": 80, "SAN DIEGO": 60, "SAN JUAN": 80, "SANTA RITA": 90, "TUCACAS": 100, "VICTORIA": 75, "VILLAS DE ARAGUA": 80}, "semana5": {"ACACIAS": 80, "BARQUISIMETO": 90, "BOSQUE": 75, "CASTA\u00d1O": 80, "CIRCULO MILITAR": 70, "GUACARA": 80, "IPSFA": 80, "MORA": 80, "NAGUANAGUA": 70, "SAN DIEGO": 80, "SAN JUAN": 80, "SANTA RITA": 90, "TUCACAS": 80, "VICTORIA": 90, "VILLAS DE ARAGUA": 90}}}};
+
+        function abrirRanking() {
+            const mesActual = document.getElementById('mes-titulo').innerText.toLowerCase();
+            document.getElementById('titulo-ranking-mes').innerText = "MES SELECCIONADO: " + mesActual.toUpperCase();
+            let lista = [];
+            
+            if (DATOS_REALES[mesActual] && DATOS_REALES[mesActual]["mensual"]) {
+                Object.keys(DATOS_REALES[mesActual]["mensual"]).forEach(suc => {
+                    lista.push({ nombre: suc, total: DATOS_REALES[mesActual]["mensual"][suc] });
+                });
+            }
+            lista.sort((a, b) => b.total - a.total);
+            const cuerpo = document.getElementById('cuerpoRanking');
+            cuerpo.innerHTML = lista.map(i => {
+                const url = `${mesActual}/${i.nombre.toLowerCase()}/REPORTE_${i.nombre}_${mesActual.toUpperCase()}.html`;
+                return `<tr>
+                    <td>${i.nombre}</td>
+                    <td style="text-align:right;">
+                        <a href="${url}" class="link-incidencia" title="Ver Reporte">${i.total}</a>
+                    </td>
+                </tr>`;
+            }).join('');
+            document.getElementById('modalRanking').style.display = "block";
+        }
+        function cerrarRanking() { document.getElementById('modalRanking').style.display = "none"; }
+    </script>
+        
+</head>
+<body>
+    <header style="padding: 10px 0;"><img src="RECURSOS/logo.png" alt="LUXOR" class="logo-luxor" style="max-width:200px; display:block; margin:auto;"></header>
+    
+    <div class="header-titulo">ESTADÍSTICAS C.M.I <span id="mes-titulo">MAYO</span></div>
+    
+    <button class="btn-reporte-general" onclick="abrirRanking()">📊 Total de incidencias por mes</button>
+
+    <div class="tabs-container">
+        <button id="tab-men" class="tab-btn active" onclick="cambiarVista('mensual')">📅 Evaluacion Mensual</button>
+        <button id="tab-sem" class="tab-btn" onclick="cambiarVista('semanal')">📊 Evaluacion Semanal</button>
+    </div>
+
+    <div id="contenedor-mensual" class="panel-azul">
+        <main id="main-container-mensual"><div id="grupo-men-febrero" class="contenedor-sucursales group-mes-men" style="display: none;">
+    <a href="febrero/ACACIAS/REPORTE_ACACIAS_FEBRERO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="febrero/BARQUISIMETO/REPORTE_BARQUISIMETO_FEBRERO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="febrero/BOSQUE/REPORTE_BOSQUE_FEBRERO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="febrero/CASTAÑO/REPORTE_CASTAÑO_FEBRERO.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="febrero/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_FEBRERO.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="febrero/GUACARA/REPORTE_GUACARA_FEBRERO.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="febrero/IPSFA/REPORTE_IPSFA_FEBRERO.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="febrero/MORA/REPORTE_MORA_FEBRERO.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="febrero/NAGUANAGUA/REPORTE_NAGUANAGUA_FEBRERO.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="febrero/SAN DIEGO/REPORTE_SAN DIEGO_FEBRERO.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="febrero/SAN JUAN/REPORTE_SAN JUAN_FEBRERO.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="febrero/SANTA RITA/REPORTE_SANTA RITA_FEBRERO.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="febrero/TUCACAS/REPORTE_TUCACAS_FEBRERO.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="febrero/VICTORIA/REPORTE_VICTORIA_FEBRERO.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="febrero/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_FEBRERO.html" class="card-sucursal" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+</div>
+<div id="grupo-men-marzo" class="contenedor-sucursales group-mes-men" style="display: none;">
+    <a href="marzo/ACACIAS/REPORTE_ACACIAS_MARZO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="marzo/BARQUISIMETO/REPORTE_BARQUISIMETO_MARZO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="marzo/BOSQUE/REPORTE_BOSQUE_MARZO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="marzo/CASTAÑO/REPORTE_CASTAÑO_MARZO.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="marzo/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_MARZO.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="marzo/GUACARA/REPORTE_GUACARA_MARZO.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="marzo/IPSFA/REPORTE_IPSFA_MARZO.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="marzo/MORA/REPORTE_MORA_MARZO.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="marzo/NAGUANAGUA/REPORTE_NAGUANAGUA_MARZO.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="marzo/SAN DIEGO/REPORTE_SAN DIEGO_MARZO.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="marzo/SAN JUAN/REPORTE_SAN JUAN_MARZO.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="marzo/SANTA RITA/REPORTE_SANTA RITA_MARZO.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="marzo/TUCACAS/REPORTE_TUCACAS_MARZO.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="marzo/VICTORIA/REPORTE_VICTORIA_MARZO.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="marzo/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_MARZO.html" class="card-sucursal" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+</div>
+<div id="grupo-men-abril" class="contenedor-sucursales group-mes-men" style="display: none;">
+    <a href="abril/ACACIAS/REPORTE_ACACIAS_ABRIL.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="abril/BARQUSIMETO/REPORTE_BARQUSIMETO_ABRIL.html" class="card-sucursal" data-sucursal="BARQUSIMETO">BARQUSIMETO</a>
+    <a href="abril/BOSQUE/REPORTE_BOSQUE_ABRIL.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="abril/CASTAÑO/REPORTE_CASTAÑO_ABRIL.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="abril/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_ABRIL.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="abril/GUACARA/REPORTE_GUACARA_ABRIL.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="abril/IPSFA/REPORTE_IPSFA_ABRIL.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="abril/MORA/REPORTE_MORA_ABRIL.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="abril/NAGUANAGUA/REPORTE_NAGUANAGUA_ABRIL.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="abril/SAN DIEGO/REPORTE_SAN DIEGO_ABRIL.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="abril/SAN JUAN/REPORTE_SAN JUAN_ABRIL.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="abril/SANTA RITA/REPORTE_SANTA RITA_ABRIL.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="abril/TUCACAS/REPORTE_TUCACAS_ABRIL.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="abril/VICTORIA/REPORTE_VICTORIA_ABRIL.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="abril/VILLAS/REPORTE_VILLAS_ABRIL.html" class="card-sucursal" data-sucursal="VILLAS">VILLAS</a>
+</div>
+<div id="grupo-men-mayo" class="contenedor-sucursales group-mes-men" style="display: grid;">
+    <a href="mayo/ACACIAS/REPORTE_ACACIAS_MAYO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="mayo/BARQUISIMETO/REPORTE_BARQUISIMETO_MAYO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="mayo/BOSQUE/REPORTE_BOSQUE_MAYO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="mayo/CASTAÑO/REPORTE_CASTAÑO_MAYO.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="mayo/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_MAYO.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="mayo/GUACARA/REPORTE_GUACARA_MAYO.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="mayo/IPSFA/REPORTE_IPSFA_MAYO.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="mayo/MORA/REPORTE_MORA_MAYO.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="mayo/NAGUANAGUA/REPORTE_NAGUANAGUA_MAYO.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="mayo/SAN DIEGO/REPORTE_SAN DIEGO_MAYO.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="mayo/SAN JUAN/REPORTE_SAN JUAN_MAYO.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="mayo/SANTA RITA/REPORTE_SANTA RITA_MAYO.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="mayo/TUCACAS/REPORTE_TUCACAS_MAYO.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="mayo/VICTORIA/REPORTE_VICTORIA_MAYO.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="mayo/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_MAYO.html" class="card-sucursal" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+</div>
+</main>
+    </div>
+    
+    <div id="contenedor-semanal" class="panel-azul" style="display:none;">
+        <div class="semanas-subselector">
+            <button class="btn-semana active" onclick="seleccionarSemana('semana1', this)">Semana 1</button>
+            <button class="btn-semana" onclick="seleccionarSemana('semana2', this)">Semana 2</button>
+            <button class="btn-semana" onclick="seleccionarSemana('semana3', this)">Semana 3</button>
+            <button class="btn-semana" onclick="seleccionarSemana('semana4', this)">Semana 4</button>
+            <button class="btn-semana" onclick="seleccionarSemana('semana5', this)">Semana 5</button>
+        </div>
+        <main id="main-container-semanal"><div id="grupo-sem-febrero" class="contenedor-sucursales group-mes-sem" style="display: none;">
+    <a href="#" id="link-sem-febrero-ACACIAS" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="#" id="link-sem-febrero-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="#" id="link-sem-febrero-BOSQUE" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="#" id="link-sem-febrero-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="#" id="link-sem-febrero-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="#" id="link-sem-febrero-GUACARA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="GUACARA">GUACARA</a>
+    <a href="#" id="link-sem-febrero-IPSFA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="IPSFA">IPSFA</a>
+    <a href="#" id="link-sem-febrero-MORA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="MORA">MORA</a>
+    <a href="#" id="link-sem-febrero-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="#" id="link-sem-febrero-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="#" id="link-sem-febrero-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="#" id="link-sem-febrero-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="#" id="link-sem-febrero-TUCACAS" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="#" id="link-sem-febrero-VICTORIA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="#" id="link-sem-febrero-VILLAS DE ARAGUA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+</div>
+<div id="grupo-sem-marzo" class="contenedor-sucursales group-mes-sem" style="display: none;">
+    <a href="#" id="link-sem-marzo-ACACIAS" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="#" id="link-sem-marzo-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="#" id="link-sem-marzo-BOSQUE" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="#" id="link-sem-marzo-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="#" id="link-sem-marzo-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="#" id="link-sem-marzo-GUACARA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="GUACARA">GUACARA</a>
+    <a href="#" id="link-sem-marzo-IPSFA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="IPSFA">IPSFA</a>
+    <a href="#" id="link-sem-marzo-MORA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="MORA">MORA</a>
+    <a href="#" id="link-sem-marzo-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="#" id="link-sem-marzo-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="#" id="link-sem-marzo-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="#" id="link-sem-marzo-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="#" id="link-sem-marzo-TUCACAS" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="#" id="link-sem-marzo-VICTORIA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="#" id="link-sem-marzo-VILLAS DE ARAGUA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+</div>
+<div id="grupo-sem-abril" class="contenedor-sucursales group-mes-sem" style="display: none;">
+    <a href="#" id="link-sem-abril-ACACIAS" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="#" id="link-sem-abril-BARQUSIMETO" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="BARQUSIMETO">BARQUSIMETO</a>
+    <a href="#" id="link-sem-abril-BOSQUE" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="#" id="link-sem-abril-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="#" id="link-sem-abril-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="#" id="link-sem-abril-GUACARA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="GUACARA">GUACARA</a>
+    <a href="#" id="link-sem-abril-IPSFA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="IPSFA">IPSFA</a>
+    <a href="#" id="link-sem-abril-MORA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="MORA">MORA</a>
+    <a href="#" id="link-sem-abril-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="#" id="link-sem-abril-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="#" id="link-sem-abril-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="#" id="link-sem-abril-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="#" id="link-sem-abril-TUCACAS" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="#" id="link-sem-abril-VICTORIA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="#" id="link-sem-abril-VILLAS" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="VILLAS">VILLAS</a>
+</div>
+<div id="grupo-sem-mayo" class="contenedor-sucursales group-mes-sem" style="display: grid;">
+    <a href="#" id="link-sem-mayo-ACACIAS" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="#" id="link-sem-mayo-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="#" id="link-sem-mayo-BOSQUE" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="#" id="link-sem-mayo-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="CASTAÑO">CASTAÑO</a>
+    <a href="#" id="link-sem-mayo-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
+    <a href="#" id="link-sem-mayo-GUACARA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="GUACARA">GUACARA</a>
+    <a href="#" id="link-sem-mayo-IPSFA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="IPSFA">IPSFA</a>
+    <a href="#" id="link-sem-mayo-MORA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="MORA">MORA</a>
+    <a href="#" id="link-sem-mayo-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="#" id="link-sem-mayo-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="SAN DIEGO">SAN DIEGO</a>
+    <a href="#" id="link-sem-mayo-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="SAN JUAN">SAN JUAN</a>
+    <a href="#" id="link-sem-mayo-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="SANTA RITA">SANTA RITA</a>
+    <a href="#" id="link-sem-mayo-TUCACAS" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="#" id="link-sem-mayo-VICTORIA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="#" id="link-sem-mayo-VILLAS DE ARAGUA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+</div>
+</main>
+    </div>
+    
+    <div class="selector-meses">
+        <div class="titulo-seccion">HISTORIAL DE EVALUACIONES:</div>
+        <button class="btn-mes " onclick="cambiarMes('febrero', this)">febrero</button>
+<button class="btn-mes " onclick="cambiarMes('marzo', this)">marzo</button>
+<button class="btn-mes " onclick="cambiarMes('abril', this)">abril</button>
+<button class="btn-mes active" onclick="cambiarMes('mayo', this)">mayo</button>
+
+    </div>
+
+    <script>
+        let modoActual = 'mensual';
+        let semanaActual = 'semana1';
+
+        function cambiarMes(mes, btn) {
+            document.querySelectorAll('.btn-mes').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('mes-titulo').innerText = mes.toUpperCase();
+            
+            document.querySelectorAll('.group-mes-men').forEach(div => div.style.display = 'none');
+            document.querySelectorAll('.group-mes-sem').forEach(div => div.style.display = 'none');
+            
+            if(modoActual === 'mensual') {
+                const target = document.getElementById('grupo-men-' + mes);
+                if(target) target.style.display = 'grid';
+            } else {
+                const target = document.getElementById('grupo-sem-' + mes);
+                if(target) target.style.display = 'grid';
+                renderizarEstructuraSemanales();
+            }
+        }
+
+        function cambiarVista(modo) {
+            modoActual = modo;
+            document.getElementById('tab-men').classList.remove('active');
+            document.getElementById('tab-sem').classList.remove('active');
+            
+            const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
+            document.querySelectorAll('.group-mes-men').forEach(div => div.style.display = 'none');
+            document.querySelectorAll('.group-mes-sem').forEach(div => div.style.display = 'none');
+
+            if(modo === 'mensual') {
+                document.getElementById('tab-men').classList.add('active');
+                document.getElementById('contenedor-mensual').style.display = 'block';
+                document.getElementById('contenedor-semanal').style.display = 'none';
+                const target = document.getElementById('grupo-men-' + mesAct);
+                if(target) target.style.display = 'grid';
+            } else {
+                document.getElementById('tab-sem').classList.add('active');
+                document.getElementById('contenedor-mensual').style.display = 'none';
+                document.getElementById('contenedor-semanal').style.display = 'block';
+                const target = document.getElementById('grupo-sem-' + mesAct);
+                if(target) target.style.display = 'grid';
+                renderizarEstructuraSemanales();
+            }
+        }
+
+        function seleccionarSemana(semana, btn) {
+            document.querySelectorAll('.btn-semana').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            semanaActual = semana;
+            renderizarEstructuraSemanales();
+        }
+
+        function renderizarEstructuraSemanales() {
+            const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
+            const dataMes = DATOS_REALES[mesAct] || {};
+            const dataSemanas = dataMes.semanas || {};
+            const scoreSemana = dataSemanas[semanaActual] || {};
+
+            const tarjetas = document.querySelectorAll(`#grupo-sem-${mesAct} .card-suc-sem`);
+            tarjetas.forEach(tarjeta => {
+                const sucUpper = tarjeta.getAttribute('data-sucursal');
+                const score = scoreSemana[sucUpper] !== undefined ? scoreSemana[sucUpper] : 100;
+                
+                tarjeta.href = `${mesAct}/${sucUpper.toLowerCase()}/REPORTE_${sucUpper}_${mesAct.toUpperCase()}_${semanaActual.toUpperCase()}.html`;
+                tarjeta.innerHTML = `${sucUpper.toLowerCase()} <span class="porcentaje-card">${score}%</span>`;
+                
+                if(score >= 70) {
+                    tarjeta.style.background = "#00B0F0";
+                    tarjeta.style.color = "white";
+                } else {
+                    tarjeta.style.background = "#E61E25";
+                    tarjeta.style.color = "white";
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if(modoActual === 'semanal') renderizarEstructuraSemanales();
+        });
+
+    </script>
+</body>
+</html>
