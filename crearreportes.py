@@ -103,7 +103,7 @@ def ejecutar_reportes():
             
             id_ranking_datos[mes_n.lower()] = {
                 "mensual": {},
-                "semanas": {f"semana{i}": {} for i in range(1, 6)}
+                "semanas_incidencias": {f"semana{i}": {} for i in range(1, 6)}
             }
             
             ruta_mes = os.path.join(ruta_base, mes_n)
@@ -185,20 +185,16 @@ def ejecutar_reportes():
                     fr.write(f"""<html><head><meta charset='UTF-8'>{CSS_BASE}</head><body><img src='../../RECURSOS/logo.png' class='logo'><div class='report-container'><h1 class='report-title'>DATOS CLAVES - {suc} ({mes_n.upper()})</h1><table><thead><tr><th>Incidencia</th>{"".join([f"<th>{m.upper()}</th>" for m in meses_existentes[:idx_m+1]])}<th></th><th></th></tr></thead><tbody>{filas_html}{f_total}</tbody></table><div class='botones-footer'><a href='../../panel.html' class='btn-volver'><i class='fas fa-home'></i> Menú Principal</a></div></div></body></html>""")
 
 
-                # --- NUEVA GENERACIÓN DE REPORTES SEMANALES CON HISTÓRICO ACUMULATIVO ---
+                # --- NUEVA GENERACIÓN DE REPORTES SEMANALES SIN PORCENTAJES (MÉTRICA INCIDENCIAS) ---
                 for idx_s, sem_key in enumerate(semanas_keys):
-                    semanas_visibles = semanas_keys[:idx_s+1] # Trae semanas acumuladas (ej: s1, s2 y s3)
+                    semanas_visibles = semanas_keys[:idx_s+1]
                     
-                    # Calcular nota real de la semana evaluada
-                    conteo_incidencias_actual = conteo_semanal_sucursal[sem_key]
-                    total_semana_actual = totales_semanales_sucursal[sem_key]
-                    suma_azul_sem = sum(v_p for inc_c, cant in conteo_incidencias_actual.items() if not (inc_c == "GSA" and suc_upper not in SUCURSALES_GOURMET) and cant == 0)
-                    res_final_sem = min(100, math.ceil(suma_azul_sem / 5) * 5)
-                    if total_semana_actual > 0 and res_final_sem == 100: res_final_sem = 95
-                    if total_semana_actual == 0: res_final_sem = 100
+                    # Ahora guardamos el total acumulado de incidencias en esta semana específica
+                    total_incidencias_semana = totales_semanales_sucursal[sem_key]
+                    id_ranking_datos[mes_n.lower()]["semanas_incidencias"][sem_key][suc_upper] = total_incidencias_semana
                     
-                    id_ranking_datos[mes_n.lower()]["semanas"][sem_key][suc_upper] = res_final_sem
-                    clase_f_sem = "azul" if res_final_sem >= 70 else "rojo"
+                    # Lógica de Color: 0 incidencias = Azul, 1 o más = Rojo
+                    clase_f_sem = "azul" if total_incidencias_semana == 0 else "rojo"
                     
                     filas_html_sem = ""
                     for idx_inc, inc in enumerate(incidencias_config):
@@ -208,8 +204,7 @@ def ejecutar_reportes():
                         valores_historicos_semanas = [conteo_semanal_sucursal[s].get(inc['cod'], 0) for s in semanas_visibles]
                         
                         for i_s, cant_sem in enumerate(valores_historicos_semanas):
-                            # Regla Luxor: Azul si es menor o igual al histórico previo de semanas
-                            clase_c_sem = "azul" if (i_s > 0 and cant_sem <= min(valores_historicos_semanas[:i_s])) else ("" if i_s == 0 else "rojo")
+                            clase_c_sem = "azul" if cant_sem == 0 else "rojo"
                             sem_nombre_iterada = semanas_visibles[i_s]
                             fotos_sem = fotos_por_semana_incidencia[sem_nombre_iterada].get(inc['cod'], [])
                             
@@ -224,24 +219,25 @@ def ejecutar_reportes():
                             else:
                                 tr_sem += f"<td class='{clase_c_sem}'>{cant_sem}</td>"
                                 
-                        tr_sem += f"<td>{v_p}%</td>"
+                        tr_sem += f"<td>{inc['cod']}</td>"
                         if idx_inc == 0:
-                            tr_sem += f"<td rowspan='{len(conteo_incidencias_actual)+1}' class='{clase_f_sem} score-final'>{res_final_sem}%</td>"
+                            # Se reemplaza la celda de score final por la cantidad de INCIDENCIAS totales de la semana actual
+                            tr_sem += f"<td rowspan='{len(incidencias_config)+1}' class='{clase_f_sem} score-final'>{total_incidencias_semana}<br><span style='font-size:1.2rem; display:block; margin-top:-5px;'>INC.</span></td>"
                         filas_html_sem += f"<tr>{tr_sem}</tr>"
                         
                     # Fila de Totales por Semana
                     totales_historicos_semanas = [totales_semanales_sucursal[s] for s in semanas_visibles]
-                    f_total_sem = f"<tr class='fila-total'><td>TOTAL</td>"
+                    f_total_sem = f"<tr class='fila-total'><td>TOTAL INCIDENCIAS</td>"
                     for i_s, t_sem in enumerate(totales_historicos_semanas):
-                        clase_tot_sem = "azul" if (i_s > 0 and t_sem <= min(totales_historicos_semanas[:i_s])) else ("" if i_s == 0 else "rojo")
+                        clase_tot_sem = "azul" if t_sem == 0 else "rojo"
                         f_total_sem += f"<td class='{clase_tot_sem}'>{t_sem}</td>"
-                    f_total_sem += f"<td>{v_p}%</td></tr>"
+                    f_total_sem += f"<td>-</td></tr>"
                     
                     header_semanas = "".join([f"<th>SEMANA {s[-1]}</th>" for s in semanas_visibles])
                     nombre_html_semana = f"REPORTE_{suc_upper}_{mes_n.upper()}_{sem_key.upper()}.html"
                     
                     with open(os.path.join(ruta_suc, nombre_html_semana), "w", encoding="utf-8") as fs:
-                        fs.write(f"""<html><head><meta charset='UTF-8'>{CSS_BASE}</head><body><img src='../../RECURSOS/logo.png' class='logo'><div class='report-container'><h1 class='report-title'>DATOS CLAVES {sem_key.upper()} - {suc_upper} ({mes_n.upper()})</h1><table><thead><tr><th>Incidencia</th>{header_semanas}<th>VALOR P.</th><th>PUNTAJE</th></tr></thead><tbody>{filas_html_sem}{f_total_sem}</tbody></table><div class='botones-footer'><a href='../../panel.html' class='btn-volver'><i class='fas fa-home'></i> Menú Principal</a></div></div></body></html>""")
+                        fs.write(f"""<html><head><meta charset='UTF-8'>{CSS_BASE}</head><body><img src='../../RECURSOS/logo.png' class='logo'><div class='report-container'><h1 class='report-title'>INCIDENCIAS SEMANALES {sem_key.upper()} - {suc_upper} ({mes_n.upper()})</h1><table><thead><tr><th>Incidencia</th>{header_semanas}<th>CÓDIGO</th><th>TOTAL SEMANA</th></tr></thead><tbody>{filas_html_sem}{f_total_sem}</tbody></table><div class='botones-footer'><a href='../../panel.html' class='btn-volver'><i class='fas fa-home'></i> Menú Principal</a></div></div></body></html>""")
 
         with open("datos_ranking.json", "w", encoding="utf-8") as jf:
             json.dump(id_ranking_datos, jf, indent=4)
