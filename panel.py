@@ -552,6 +552,7 @@ def generar_index_maestro_con_limpieza():
 </body>
 </html>"""
 
+        # 2. REALIZAMOS LOS REEMPLAZOS (Asegúrate de que los nombres coincidan con los del HTML)
         html_plantilla = html_plantilla.replace("__VERSION__", str(version))
         html_plantilla = html_plantilla.replace("__ULTIMO_MES_UPPER__", ultimo_mes.upper())
         html_plantilla = html_plantilla.replace("__HTML_SUCURSALES_MENSUAL__", html_sucursales_mensual)
@@ -559,10 +560,15 @@ def generar_index_maestro_con_limpieza():
         html_plantilla = html_plantilla.replace("__BOTONES_MESES__", botones_meses)
         html_plantilla = html_plantilla.replace("__RANKING_HTML__", ranking_html)
 
+        # 3. GUARDAMOS EL ARCHIVO FINAL
         with open(os.path.join(ruta_raiz, "panel.html"), "w", encoding="utf-8") as f:
             f.write(html_plantilla)
             
-        print("✨ INDEX ACTUALIZADO EXITOSAMENTE CON RECUADROS SEMANALES LIMPIOS (panel.html)")
+        # 4. OPCIONAL: CREAR EL index.html PARA GITHUB PAGES
+        with open(os.path.join(ruta_raiz, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html_plantilla)
+            
+        print("✨ PANEL GENERADO EXITOSAMENTE")
 
     except Exception as e:
         print(f"\n❌ [ERROR]: {e}")
