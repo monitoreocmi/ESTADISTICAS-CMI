@@ -246,157 +246,157 @@ def generar_index_maestro_con_limpieza():
         const mesesOrdenadosLista = ["enero", "febrero", "marzo", "abril", "mayo", "junio", 
                                      "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
-        function obtenerMesAnterior(mesActual) {
+        function obtenerMesAnterior(mesActual) {{
             let idx = mesesOrdenadosLista.indexOf(mesActual.toLowerCase());
             if (idx <= 0) return mesesOrdenadosLista[0];
             return mesesOrdenadosLista[idx - 1];
-        }
+        }}
 
-        function actualizarGraficoYRankingMensual() {
+        function actualizarGraficoYRankingMensual() {{
             const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
             const mesAnt = obtenerMesAnterior(mesAct);
             
             let listaSucs = [];
-            if (DATOS_REALES[mesAct] && DATOS_REALES[mesAct]["mensual"]) {
-                Object.keys(DATOS_REALES[mesAct]["mensual"]).forEach(suc => {
-                    listaSucs.push({ nombre: suc, total: DATOS_REALES[mesAct]["mensual"][suc] });
-                });
-            }
+            if (DATOS_REALES[mesAct] && DATOS_REALES[mesAct]["mensual"]) {{
+                Object.keys(DATOS_REALES[mesAct]["mensual"]).forEach(suc => {{
+                    listaSucs.push({{ nombre: suc, total: DATOS_REALES[mesAct]["mensual"][suc] }});
+                }});
+            }}
             listaSucs.sort((a, b) => b.total - a.total);
             
             const ulRanking = document.getElementById('ranking-lateral-mensual');
-            if (listaSucs.length === 0) {
+            if (listaSucs.length === 0) {{
                 ulRanking.innerHTML = '<li class="item-ranking-lateral" style="justify-content:center;color:#888;">Sin incidencias registradas</li>';
-            } else {
+            }} else {{
                 ulRanking.innerHTML = listaSucs.map((s, index) => `
                     <li class="item-ranking-lateral">
-                        <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
-                        <span class="badge-incidencias">${s.total}</span>
+                        <span><span class="posicion-ranking">#\${{index+1}}</span>\${{s.nombre}}</span>
+                        <span class="badge-incidencias">\${{s.total}}</span>
                     </li>
                 `).join('');
-            }
+            }}
 
             let totalIncidenciasMesActual = listaSucs.reduce((acc, current) => acc + current.total, 0);
             let totalIncidenciasMesAnterior = 0;
-            if (DATOS_REALES[mesAnt] && DATOS_REALES[mesAnt]["mensual"]) {
-                Object.keys(DATOS_REALES[mesAnt]["mensual"]).forEach(suc => {
+            if (DATOS_REALES[mesAnt] && DATOS_REALES[mesAnt]["mensual"]) {{
+                Object.keys(DATOS_REALES[mesAnt]["mensual"]).forEach(suc => {{
                     totalIncidenciasMesAnterior += DATOS_REALES[mesAnt]["mensual"][suc];
-                });
-            }
+                }});
+            }}
 
             document.getElementById('titulo-grafico-men').innerText = `Comparativa Incidencias Totales`;
 
             const ctx = document.getElementById('chartMensual').getContext('2d');
-            if (miChartMensual) {
+            if (miChartMensual) {{
                 miChartMensual.destroy();
-            }
+            }}
             
-            miChartMensual = new Chart(ctx, {
+            miChartMensual = new Chart(ctx, {{
                 type: 'bar',
-                data: {
+                data: {{
                     labels: [mesAnt.toUpperCase(), mesAct.toUpperCase()],
-                    datasets: [{
+                    datasets: [{{
                         label: 'Incidencias Totales',
                         data: [totalIncidenciasMesAnterior, totalIncidenciasMesActual],
                         backgroundColor: ['#00B0F0', '#E61E25'],
                         borderWidth: 1,
                         borderRadius: 5
-                    }]
-                },
-                options: {
+                    }}]
+                }},
+                options: {{
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0 } }
-                    }
-                }
-            });
+                    plugins: {{
+                        legend: {{ display: false }}
+                    }},
+                    scales: {{
+                        y: {{ beginAtZero: true, ticks: {{ precision: 0 }} }}
+                    }}
+                }}
+            }});
         }
 
-        function actualizarGraficoYRankingSemanal() {
+        function actualizarGraficoYRankingSemanal() {{
             const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
             const numSemanaActual = parseInt(semanaActual.replace('semana', ''));
             const numSemanaAnterior = numSemanaActual > 1 ? numSemanaActual - 1 : 1;
             const semanaAntLabel = 'semana' + numSemanaAnterior;
 
-            document.getElementById('titulo-ranking-lateral-sem').innerText = `Incidencias: Semana ${numSemanaActual}`;
-            document.getElementById('titulo-grafico-sem').innerText = `Comparativa Sem. ${numSemanaAnterior} vs Sem. ${numSemanaActual}`;
+            document.getElementById('titulo-ranking-lateral-sem').innerText = `Incidencias: Semana \${{numSemanaActual}}`;
+            document.getElementById('titulo-grafico-sem').innerText = `Comparativa Sem. \${{numSemanaAnterior}} vs Sem. \${{numSemanaActual}}`;
 
-            const dataMes = DATOS_REALES[mesAct] || {};
-            const dataSemanas = dataMes.semanas_incidencias || dataMes.semanas || {}; 
+            const dataMes = DATOS_REALES[mesAct] || {{}};
+            const dataSemanas = dataMes.semanas_incidencias || dataMes.semanas || {{}}; 
             
-            let incidenciasSemanaActual = dataSemanas[semanaActual] || {};
-            let incidenciasSemanaAnterior = dataSemanas[semanaAntLabel] || {};
+            let incidenciasSemanaActual = dataSemanas[semanaActual] || {{}};
+            let incidenciasSemanaAnterior = dataSemanas[semanaAntLabel] || {{}};
 
             let listaSucsSem = [];
-            Object.keys(incidenciasSemanaActual).forEach(suc => {
+            Object.keys(incidenciasSemanaActual).forEach(suc => {{
                 let valor = incidenciasSemanaActual[suc];
-                if (typeof valor === 'object' && valor !== null) {
+                if (typeof valor === 'object' && valor !== null) {{
                     valor = valor.incidencias || 0;
-                }
-                listaSucsSem.push({ nombre: suc, total: Number(valor) || 0 });
-            });
+                }}
+                listaSucsSem.push({{ nombre: suc, total: Number(valor) || 0 }}):
+            }});
             
-            if (listaSucsSem.length === 0) {
-                const tarjetas = document.querySelectorAll(`#grupo-sem-${mesAct} .card-suc-sem`);
-                tarjetas.forEach(t => {
-                    listaSucsSem.push({ nombre: t.getAttribute('data-sucursal'), total: 0 });
-                });
-            }
+            if (listaSucsSem.length === 0) {{
+                const tarjetas = document.querySelectorAll(`#grupo-sem-\${{mesAct}} .card-suc-sem`);
+                tarjetas.forEach(t => {{
+                    listaSucsSem.push({{ nombre: t.getAttribute('data-sucursal'), total: 0 }});
+                }});
+            }}
             
             listaSucsSem.sort((a, b) => b.total - a.total);
 
             const ulRankingSem = document.getElementById('ranking-lateral-semanal');
             ulRankingSem.innerHTML = listaSucsSem.map((s, index) => `
                 <li class="item-ranking-lateral">
-                    <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
-                    <span class="badge-incidencias">${s.total}</span>
+                    <span><span class="posicion-ranking">#\${{index+1}}</span>\${{s.nombre}}</span>
+                    <span class="badge-incidencias">\text{\${{s.total}}}</span>
                 </li>
             `).join('');
 
             let totalSemAct = listaSucsSem.reduce((acc, curr) => acc + curr.total, 0);
             let totalSemAnt = 0;
             
-            Object.keys(incidenciasSemanaAnterior).forEach(suc => {
+            Object.keys(incidenciasSemanaAnterior).forEach(suc => {{
                 let val = incidenciasSemanaAnterior[suc];
                 if (typeof val === 'object' && val !== null) val = val.incidencias || 0;
                 totalSemAnt += Number(val) || 0;
-            });
+            }});
 
             const ctxSem = document.getElementById('chartSemanal').getContext('2d');
-            if (miChartSemanal) {
+            if (miChartSemanal) {{
                 miChartSemanal.destroy();
-            }
+            }}
 
-            miChartSemanal = new Chart(ctxSem, {
+            miChartSemanal = new Chart(ctxSem, {{
                 type: 'bar',
-                data: {
-                    labels: [`Semana ${numSemanaAnterior}`, `Semana ${numSemanaActual}`],
-                    datasets: [{
+                data: {{
+                    labels: [`Semana \${{numSemanaAnterior}}`, `Semana \${{numSemanaActual}}`],
+                    datasets: [{{
                         label: 'Incidencias Totales',
                         data: [totalSemAnt, totalSemAct],
                         backgroundColor: ['#0047AB', '#F9D908'],
                         borderWidth: 1,
                         borderRadius: 5
-                    }]
-                },
-                options: {
+                    }}]
+                }},
+                options: {{
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0 } }
-                    }
-                }
-            });
+                    plugins: {{
+                        legend: {{ display: false }}
+                    }},
+                    scales: {{
+                        y: {{ beginAtZero: true, ticks: {{ precision: 0 }} }}
+                    }}
+                }}
+            }});
         }
 
-        function cambiarMes(mes, btn) {
+        function cambiarMes(mes, btn) {{
             document.querySelectorAll('.btn-mes').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('mes-titulo').innerText = mes.toUpperCase();
@@ -404,19 +404,19 @@ def generar_index_maestro_con_limpieza():
             document.querySelectorAll('.group-mes-men').forEach(div => div.style.display = 'none');
             document.querySelectorAll('.group-mes-sem').forEach(div => div.style.display = 'none');
             
-            if(modoActual === 'mensual') {
+            if(modoActual === 'mensual') {{
                 const target = document.getElementById('grupo-men-' + mes);
                 if(target) target.style.display = 'grid';
                 actualizarGraficoYRankingMensual();
-            } else {
+            }} else {{
                 const target = document.getElementById('grupo-sem-' + mes);
                 if(target) target.style.display = 'grid';
                 renderizarEstructuraSemanales();
                 actualizarGraficoYRankingSemanal();
-            }
-        }
+            }}
+        }}
 
-        function cambiarVista(modo) {
+        function cambiarVista(modo) {{
             modoActual = modo;
             document.getElementById('tab-men').classList.remove('active');
             document.getElementById('tab-sem').classList.remove('active');
@@ -425,14 +425,14 @@ def generar_index_maestro_con_limpieza():
             document.querySelectorAll('.group-mes-men').forEach(div => div.style.display = 'none');
             document.querySelectorAll('.group-mes-sem').forEach(div => div.style.display = 'none');
 
-            if(modo === 'mensual') {
+            if(modo === 'mensual') {{
                 document.getElementById('tab-men').classList.add('active');
                 document.getElementById('contenedor-mensual').style.display = 'block';
                 document.getElementById('contenedor-semanal').style.display = 'none';
                 const target = document.getElementById('grupo-men-' + mesAct);
                 if(target) target.style.display = 'grid';
                 actualizarGraficoYRankingMensual();
-            } else {
+            }} else {{
                 document.getElementById('tab-sem').classList.add('active');
                 document.getElementById('contenedor-mensual').style.display = 'none';
                 document.getElementById('contenedor-semanal').style.display = 'block';
@@ -440,48 +440,48 @@ def generar_index_maestro_con_limpieza():
                 if(target) target.style.display = 'grid';
                 renderizarEstructuraSemanales();
                 actualizarGraficoYRankingSemanal();
-            }
-        }
+            }}
+        }}
 
-        function seleccionarSemana(semana, btn) {
+        function seleccionarSemana(semana, btn) {{
             document.querySelectorAll('.btn-semana').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             semanaActual = semana;
             renderizarEstructuraSemanales();
             actualizarGraficoYRankingSemanal();
-        }
+        }}
 
-        function renderizarEstructuraSemanales() {
+        function renderizarEstructuraSemanales() {{
             const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
-            const dataMes = DATOS_REALES[mesAct] || {};
-            const dataSemanas = dataMes.semanas || {};
-            const scoreSemana = dataSemanas[semanaActual] || {};
+            const dataMes = DATOS_REALES[mesAct] || {{}};
+            const dataSemanas = dataMes.semanas || {{}};
+            const scoreSemana = dataSemanas[semanaActual] || {{}};
 
-            const tarjetas = document.querySelectorAll(`#grupo-sem-${mesAct} .card-suc-sem`);
-            tarjetas.forEach(tarjeta => {
+            const tarjetas = document.querySelectorAll(`#grupo-sem-\${{mesAct}} .card-suc-sem`);
+            tarjetas.forEach(tarjeta => {{
                 const sucUpper = tarjeta.getAttribute('data-sucursal');
                 const score = scoreSemana[sucUpper] !== undefined ? scoreSemana[sucUpper] : 100;
                 
-                tarjeta.href = `${mesAct}/${sucUpper.toLowerCase()}/REPORTE_${sucUpper}_${mesAct.toUpperCase()}_${semanaActual.toUpperCase()}.html`;
-                tarjeta.innerHTML = `${sucUpper.toLowerCase()} <span class="porcentaje-card">${score}%</span>`;
+                tarjeta.href = `\${{mesAct}}/\${{sucUpper.toLowerCase()}}/REPORTE_\${{sucUpper}}_\${{mesAct.toUpperCase()}}_\${{semanaActual.toUpperCase()}}.html`;
+                tarjeta.innerHTML = `\${{sucUpper.toLowerCase()}} <span class="porcentaje-card">\${{score}}%</span>`;
                 
-                if(score >= 70) {
+                if(score >= 70) {{
                     tarjeta.style.background = "#00B0F0";
                     tarjeta.style.color = "white";
-                } else {
+                }} else {{
                     tarjeta.style.background = "#E61E25";
                     tarjeta.style.color = "white";
-                }
-            });
-        }
+                }}
+            }});
+        }}
 
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", () => {{
             actualizarGraficoYRankingMensual();
-            if(modoActual === 'semanal') {
+            if(modoActual === 'semanal') {{
                 renderizarEstructuraSemanales();
                 actualizarGraficoYRankingSemanal();
-            }
-        });
+            }}
+        }});
 
     </script>
 </body>
