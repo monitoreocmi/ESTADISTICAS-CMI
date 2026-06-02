@@ -4,21 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Luxor</title>
-    <link rel="stylesheet" href="RECURSOS/styles.css?v=1780347852">
+    <link rel="stylesheet" href="RECURSOS/styles.css?v=1780406610">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .header-titulo { text-align: center; margin: 20px 0; font-family: 'Arial Black', sans-serif; font-weight: 900; text-transform: uppercase; color: #1A1D4D; -webkit-text-stroke: 1.5px #F9D908; text-shadow: 3px 3px 0px #0047AB; line-height: 1.1; font-size: clamp(24px, 7vw, 60px); }
         #mes-titulo { display: block; color: #1A1D4D; -webkit-text-stroke: 1.5px #F9D908; font-size: clamp(32px, 10vw, 75px); }
-        .selector-meses { width: 92%; max-width: 1150px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px auto; padding: 15px; background: #f4f4f4; border-radius: 15px; border: 1px solid #ccc; }
+        .selector-meses { width: 92%; max-width: 1400px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px auto; padding: 15px; background: #f4f4f4; border-radius: 15px; border: 1px solid #ccc; }
         .btn-mes { padding: 8px 16px; background: #1A1D4D; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
         .btn-mes.active { background: #F9D908; color: #1A1D4D; border: 2px solid #1A1D4D; }
         .titulo-seccion { width: 100%; text-align: center; color: #1A1D4D; font-weight: 800; margin-bottom: 8px; font-size: 1rem; }
         .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
         .tab-btn { background: #e0e0e0; color: #1A1D4D; border: 2px solid #1A1D4D; padding: 10px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; }
         .tab-btn.active { background: #1A1D4D; color: white; }
-        .semanas-subselector { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .semanas-subselector { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; width: 100%; }
         .btn-semana { background: #1A1D4D; color: white; border: 2px solid white; padding: 8px 15px; font-weight: bold; border-radius: 5px; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
         .btn-semana.active { background: #F9D908; color: #1A1D4D; border-color: #1A1D4D; }
         .porcentaje-card { display: block; font-size: 1.4rem; font-weight: 900; margin-top: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+        
+        .distribucion-panel { display: grid; grid-template-columns: 320px 1fr 320px; gap: 20px; width: 100%; align-items: start; }
+        @media (max-width: 1200px) {
+            .distribucion-panel { grid-template-columns: 1fr; }
+        }
+        
+        .columna-grafico { background: white; border-radius: 15px; padding: 15px; border: 3px solid #1A1D4D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px; }
+        .titulo-grafico { font-family: 'Arial', sans-serif; font-weight: bold; color: #1A1D4D; text-align: center; margin-bottom: 10px; text-transform: uppercase; font-size: 0.9rem; border-bottom: 2px solid #F9D908; padding-bottom: 5px; width: 100%; }
+        
+        .columna-ranking-lateral { background: white; border-radius: 15px; padding: 15px; border: 3px solid #1A1D4D; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-height: 550px; overflow-y: auto; }
+        .titulo-ranking-lateral { font-family: 'Arial', sans-serif; font-weight: bold; color: #E61E25; text-align: center; margin-bottom: 10px; text-transform: uppercase; font-size: 0.95rem; border-bottom: 2px solid #1A1D4D; padding-bottom: 5px; }
+        .lista-ranking-lateral { list-style: none; padding: 0; margin: 0; }
+        .item-ranking-lateral { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #1A1D4D; font-size: 0.85rem; transition: background 0.2s; }
+        .item-ranking-lateral:hover { background: #f9f9f9; }
+        .badge-incidencias { background: #E61E25; color: white; border-radius: 20px; padding: 3px 10px; font-size: 0.8rem; min-width: 35px; text-align: center; }
+        .posicion-ranking { color: #888; margin-right: 8px; font-size: 0.75rem; width: 18px; display: inline-block; }
     </style>
     
     <style>
@@ -93,7 +110,15 @@
     </div>
 
     <div id="contenedor-mensual" class="panel-azul">
-        <main id="main-container-mensual"><div id="grupo-men-febrero" class="contenedor-sucursales group-mes-men" style="display: none;">
+        <div class="distribucion-panel">
+            <div class="columna-grafico">
+                <div class="titulo-grafico" id="titulo-grafico-men">Comparativa vs Mes Anterior</div>
+                <div style="position: relative; width: 100%; height: 280px;">
+                    <canvas id="chartMensual"></canvas>
+                </div>
+            </div>
+            
+            <main id="main-container-mensual"><div id="grupo-men-febrero" class="contenedor-sucursales group-mes-men" style="display: none;">
     <a href="febrero/ACACIAS/REPORTE_ACACIAS_FEBRERO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
     <a href="febrero/BARQUISIMETO/REPORTE_BARQUISIMETO_FEBRERO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
     <a href="febrero/BOSQUE/REPORTE_BOSQUE_FEBRERO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
@@ -162,6 +187,12 @@
     <a href="mayo/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_MAYO.html" class="card-sucursal" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
 </div>
 </main>
+            
+            <div class="columna-ranking-lateral">
+                <div class="titulo-ranking-lateral">Incidencias del Mes</div>
+                <ul class="lista-ranking-lateral" id="ranking-lateral-mensual"></ul>
+            </div>
+        </div>
     </div>
     
     <div id="contenedor-semanal" class="panel-azul" style="display:none;">
@@ -172,7 +203,16 @@
             <button class="btn-semana" onclick="seleccionarSemana('semana4', this)">Semana 4</button>
             <button class="btn-semana" onclick="seleccionarSemana('semana5', this)">Semana 5</button>
         </div>
-        <main id="main-container-semanal"><div id="grupo-sem-febrero" class="contenedor-sucursales group-mes-sem" style="display: none;">
+        
+        <div class="distribucion-panel">
+            <div class="columna-grafico">
+                <div class="titulo-grafico" id="titulo-grafico-sem">Comparativa vs Semana Anterior</div>
+                <div style="position: relative; width: 100%; height: 280px;">
+                    <canvas id="chartSemanal"></canvas>
+                </div>
+            </div>
+            
+            <main id="main-container-semanal"><div id="grupo-sem-febrero" class="contenedor-sucursales group-mes-sem" style="display: none;">
     <a href="#" id="link-sem-febrero-ACACIAS" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="ACACIAS">ACACIAS</a>
     <a href="#" id="link-sem-febrero-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
     <a href="#" id="link-sem-febrero-BOSQUE" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="BOSQUE">BOSQUE</a>
@@ -241,6 +281,12 @@
     <a href="#" id="link-sem-mayo-VILLAS DE ARAGUA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
 </div>
 </main>
+            
+            <div class="columna-ranking-lateral">
+                <div class="titulo-ranking-lateral" id="titulo-ranking-lateral-sem">Incidencias de la Semana</div>
+                <ul class="lista-ranking-lateral" id="ranking-lateral-semanal"></ul>
+            </div>
+        </div>
     </div>
     
     <div class="selector-meses">
@@ -255,6 +301,161 @@
     <script>
         let modoActual = 'mensual';
         let semanaActual = 'semana1';
+        let miChartMensual = null;
+        let miChartSemanal = null;
+
+        const mesesOrdenadosLista = ["enero", "febrero", "marzo", "abril", "mayo", "junio", 
+                                     "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+        function obtenerMesAnterior(mesActual) {
+            let idx = mesesOrdenadosLista.indexOf(mesActual.toLowerCase());
+            if (idx <= 0) return mesesOrdenadosLista[0];
+            return mesesOrdenadosLista[idx - 1];
+        }
+
+        function actualizarGraficoYRankingMensual() {
+            const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
+            const mesAnt = obtenerMesAnterior(mesAct);
+            
+            let listaSucs = [];
+            if (DATOS_REALES[mesAct] && DATOS_REALES[mesAct]["mensual"]) {
+                Object.keys(DATOS_REALES[mesAct]["mensual"]).forEach(suc => {
+                    listaSucs.push({ nombre: suc, total: DATOS_REALES[mesAct]["mensual"][suc] });
+                });
+            }
+            listaSucs.sort((a, b) => b.total - a.total);
+            
+            const ulRanking = document.getElementById('ranking-lateral-mensual');
+            if (listaSucs.length === 0) {
+                ulRanking.innerHTML = '<li class="item-ranking-lateral" style="justify-content:center;color:#888;">Sin incidencias registradas</li>';
+            } else {
+                ulRanking.innerHTML = listaSucs.map((s, index) => `
+                    <li class="item-ranking-lateral">
+                        <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
+                        <span class="badge-incidencias">${s.total}</span>
+                    </li>
+                `).join('');
+            }
+
+            let totalIncidenciasMesActual = listaSucs.reduce((acc, current) => acc + current.total, 0);
+            let totalIncidenciasMesAnterior = 0;
+            if (DATOS_REALES[mesAnt] && DATOS_REALES[mesAnt]["mensual"]) {
+                Object.keys(DATOS_REALES[mesAnt]["mensual"]).forEach(suc => {
+                    totalIncidenciasMesAnterior += DATOS_REALES[mesAnt]["mensual"][suc];
+                });
+            }
+
+            document.getElementById('titulo-grafico-men').innerText = `Comparativa Incidencias Totales`;
+
+            const ctx = document.getElementById('chartMensual').getContext('2d');
+            if (miChartMensual) {
+                miChartMensual.destroy();
+            }
+            
+            miChartMensual = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [mesAnt.toUpperCase(), mesAct.toUpperCase()],
+                    datasets: [{
+                        label: 'Incidencias Totales',
+                        data: [totalIncidenciasMesAnterior, totalIncidenciasMesActual],
+                        backgroundColor: ['#00B0F0', '#E61E25'],
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+        }
+
+        function actualizarGraficoYRankingSemanal() {
+            const mesAct = document.getElementById('mes-titulo').innerText.toLowerCase();
+            const numSemanaActual = parseInt(semanaActual.replace('semana', ''));
+            const numSemanaAnterior = numSemanaActual > 1 ? numSemanaActual - 1 : 1;
+            const semanaAntLabel = 'semana' + numSemanaAnterior;
+
+            document.getElementById('titulo-ranking-lateral-sem').innerText = `Incidencias: Semana ${numSemanaActual}`;
+            document.getElementById('titulo-grafico-sem').innerText = `Comparativa Sem. ${numSemanaAnterior} vs Sem. ${numSemanaActual}`;
+
+            const dataMes = DATOS_REALES[mesAct] || {};
+            const dataSemanas = dataMes.semanas_incidencias || dataMes.semanas || {}; 
+            
+            let incidenciasSemanaActual = dataSemanas[semanaActual] || {};
+            let incidenciasSemanaAnterior = dataSemanas[semanaAntLabel] || {};
+
+            let listaSucsSem = [];
+            Object.keys(incidenciasSemanaActual).forEach(suc => {
+                let valor = incidenciasSemanaActual[suc];
+                if (typeof valor === 'object' && valor !== null) {
+                    valor = valor.incidencias || 0;
+                }
+                listaSucsSem.push({ nombre: suc, total: Number(valor) || 0 });
+            });
+            
+            if (listaSucsSem.length === 0) {
+                const tarjetas = document.querySelectorAll(`#grupo-sem-${mesAct} .card-suc-sem`);
+                tarjetas.forEach(t => {
+                    listaSucsSem.push({ nombre: t.getAttribute('data-sucursal'), total: 0 });
+                });
+            }
+            
+            listaSucsSem.sort((a, b) => b.total - a.total);
+
+            const ulRankingSem = document.getElementById('ranking-lateral-semanal');
+            ulRankingSem.innerHTML = listaSucsSem.map((s, index) => `
+                <li class="item-ranking-lateral">
+                    <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
+                    <span class="badge-incidencias">${s.total}</span>
+                </li>
+            `).join('');
+
+            let totalSemAct = listaSucsSem.reduce((acc, curr) => acc + curr.total, 0);
+            let totalSemAnt = 0;
+            
+            Object.keys(incidenciasSemanaAnterior).forEach(suc => {
+                let val = incidenciasSemanaAnterior[suc];
+                if (typeof val === 'object' && val !== null) val = val.incidencias || 0;
+                totalSemAnt += Number(val) || 0;
+            });
+
+            const ctxSem = document.getElementById('chartSemanal').getContext('2d');
+            if (miChartSemanal) {
+                miChartSemanal.destroy();
+            }
+
+            miChartSemanal = new Chart(ctxSem, {
+                type: 'bar',
+                data: {
+                    labels: [`Semana ${numSemanaAnterior}`, `Semana ${numSemanaActual}`],
+                    datasets: [{
+                        label: 'Incidencias Totales',
+                        data: [totalSemAnt, totalSemAct],
+                        backgroundColor: ['#0047AB', '#F9D908'],
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+        }
 
         function cambiarMes(mes, btn) {
             document.querySelectorAll('.btn-mes').forEach(b => b.classList.remove('active'));
@@ -267,10 +468,12 @@
             if(modoActual === 'mensual') {
                 const target = document.getElementById('grupo-men-' + mes);
                 if(target) target.style.display = 'grid';
+                actualizarGraficoYRankingMensual();
             } else {
                 const target = document.getElementById('grupo-sem-' + mes);
                 if(target) target.style.display = 'grid';
                 renderizarEstructuraSemanales();
+                actualizarGraficoYRankingSemanal();
             }
         }
 
@@ -289,6 +492,7 @@
                 document.getElementById('contenedor-semanal').style.display = 'none';
                 const target = document.getElementById('grupo-men-' + mesAct);
                 if(target) target.style.display = 'grid';
+                actualizarGraficoYRankingMensual();
             } else {
                 document.getElementById('tab-sem').classList.add('active');
                 document.getElementById('contenedor-mensual').style.display = 'none';
@@ -296,6 +500,7 @@
                 const target = document.getElementById('grupo-sem-' + mesAct);
                 if(target) target.style.display = 'grid';
                 renderizarEstructuraSemanales();
+                actualizarGraficoYRankingSemanal();
             }
         }
 
@@ -304,6 +509,7 @@
             btn.classList.add('active');
             semanaActual = semana;
             renderizarEstructuraSemanales();
+            actualizarGraficoYRankingSemanal();
         }
 
         function renderizarEstructuraSemanales() {
@@ -331,7 +537,11 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            if(modoActual === 'semanal') renderizarEstructuraSemanales();
+            actualizarGraficoYRankingMensual();
+            if(modoActual === 'semanal') {
+                renderizarEstructuraSemanales();
+                actualizarGraficoYRankingSemanal();
+            }
         });
 
     </script>
