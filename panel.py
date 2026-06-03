@@ -45,9 +45,11 @@ def generar_index_maestro_con_limpieza():
                 sucursales = [d for d in os.listdir(ruta_mes) if os.path.isdir(os.path.join(ruta_mes, d))]
                 reportes_validos = []
                 for suc in sucursales:
-                    nombre_rep = f"REPORTE_{suc.upper()}_{mes.upper()}.html"
+                    # Buscamos usando el formato en minúsculas
+                    nombre_rep = f"reporte_{suc.upper()}_{mes.upper()}.html".lower().replace(" ", "_").replace("ñ", "n")
                     if os.path.exists(os.path.join(ruta_mes, suc, nombre_rep)):
-                        reportes_validos.append({"nombre": suc, "upper": suc.upper()})
+                        # Conservamos el nombre original para visualización, pero limpiamos suc
+                        reportes_validos.append({"nombre": suc.upper().replace("_", " "), "upper": suc.upper().replace("_", " ")})
                 if reportes_validos:
                     datos_por_mes[mes] = reportes_validos
 
@@ -62,7 +64,7 @@ def generar_index_maestro_con_limpieza():
             display = "grid" if mes == ultimo_mes else "none"
             html_sucursales_mensual += f'<div id="grupo-men-{mes}" class="contenedor-sucursales group-mes-men" style="display: {display};">\n'
             for s in sorted(sucs, key=lambda x: x['nombre']):
-                url_m = f"{mes}/{s['nombre']}/REPORTE_{s['upper']}_{mes.upper()}.html"
+                url_m = f"{mes}/{s['nombre'].lower().replace(' ', '_').replace('ñ', 'n')}/reporte_{s['upper'].lower().replace(' ', '_').replace('ñ', 'n')}_{mes}.html"
                 html_sucursales_mensual += f'    <a href="{url_m}" class="card-sucursal" data-sucursal="{s["upper"]}">{s["nombre"]}</a>\n'
             html_sucursales_mensual += '</div>\n'
 
@@ -121,7 +123,7 @@ def generar_index_maestro_con_limpieza():
             lista.sort((a, b) => b.total - a.total);
             const cuerpo = document.getElementById('cuerpoRanking');
             cuerpo.innerHTML = lista.map(i => {
-                const url = `${mesActual}/${i.nombre.toLowerCase()}/REPORTE_${i.nombre}_${mesActual.toUpperCase()}.html`;
+                const url = `${mesActual}/${i.nombre.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}/reporte_${i.nombre.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}_${mesActual}.html`;
                 return `<tr>
                     <td>${i.nombre}</td>
                     <td style="text-align:right;">
@@ -320,7 +322,7 @@ def generar_index_maestro_con_limpieza():
             } else {
                 ulRanking.innerHTML = listaSucs.map((s, index) => `
                     <li class="item-ranking-lateral">
-                        <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
+                        <span><span class="posicion-ranking">#${index+1}</span>${s.nombre.replace(/_/g, ' ')}</span>
                         <span class="badge-incidencias">${s.total}</span>
                     </li>
                 `).join('');
@@ -336,7 +338,7 @@ def generar_index_maestro_con_limpieza():
             let todasLasSucs = Array.from(new Set([...Object.keys(sucsMesActual), ...Object.keys(sucsMesAnterior)])).sort();
 
             todasLasSucs.forEach(suc => {
-                labels.push(suc.toUpperCase());
+                labels.push(suc.toUpperCase().replace(/_/g, ' '));
                 datosAnt.push(sucsMesAnterior[suc] || 0);
                 datosAct.push(sucsMesActual[suc] || 0);
             });
@@ -379,7 +381,7 @@ def generar_index_maestro_con_limpieza():
             const ulRankingSem = document.getElementById('ranking-lateral-semanal');
             ulRankingSem.innerHTML = listaSucsSem.map((s, index) => `
                 <li class="item-ranking-lateral">
-                    <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
+                    <span><span class="posicion-ranking">#${index+1}</span>${s.nombre.replace(/_/g, ' ')}</span>
                     <span class="badge-incidencias">${s.total}</span>
                 </li>
             `).join('');
@@ -391,7 +393,7 @@ def generar_index_maestro_con_limpieza():
             let todasLasSucsSem = Array.from(new Set([...Object.keys(incidenciasSemanaActual), ...Object.keys(incidenciasSemanaAnterior)])).sort();
 
             todasLasSucsSem.forEach(suc => {
-                labels.push(suc.toUpperCase());
+                labels.push(suc.toUpperCase().replace(/_/g, ' '));
                 
                 let valAnt = incidenciasSemanaAnterior[suc] || 0;
                 if (typeof valAnt === 'object' && valAnt !== null) valAnt = valAnt.incidencias || 0;
@@ -520,16 +522,16 @@ def generar_index_maestro_con_limpieza():
             const tarjetas = document.querySelectorAll(`#grupo-sem-${mesAct} .card-suc-sem`);
             tarjetas.forEach(tarjeta => {
                 const sucUpper = tarjeta.getAttribute('data-sucursal');
-                let rawVal = incidenciasSemana[sucUpper.toLowerCase()] || incidenciasSemana[sucUpper] || 0;
+                let rawVal = incidenciasSemana[sucUpper] || incidenciasSemana[sucUpper.replace(/_/g, ' ')] || 0;
                 if (typeof rawVal === 'object' && rawVal !== null) {
                     rawVal = rawVal.incidencias || 0;
                 }
                 const totalIncidencias = Number(rawVal) || 0;
                 
-                tarjeta.href = `${mesAct}/${sucUpper.toLowerCase()}/REPORTE_${sucUpper}_${mesAct.toUpperCase()}_${semanaActual.toUpperCase()}.html`;
+                tarjeta.href = `${mesAct}/${sucUpper.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}/reporte_${sucUpper.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}_${mesAct}_${semanaActual.toLowerCase()}.html`;
                 
-                // CAMBIO SOLICITADO: Solo se renderiza el nombre de la sucursal limpio
-                tarjeta.innerHTML = `${sucUpper.toLowerCase()}`;
+                // Limpiamos el texto que se muestra en la tarjeta
+                tarjeta.innerHTML = `${sucUpper.toLowerCase().replace(/_/g, ' ')}`;
                 
                 if(totalIncidencias === 0) {
                     tarjeta.style.background = "#00B0F0";

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Luxor</title>
-    <link rel="stylesheet" href="RECURSOS/styles.css?v=1780512082">
+    <link rel="stylesheet" href="RECURSOS/styles.css?v=1780513881">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .header-titulo { text-align: center; margin: 20px 0; font-family: 'Arial Black', sans-serif; font-weight: 900; text-transform: uppercase; color: #1A1D4D; -webkit-text-stroke: 1.5px #F9D908; text-shadow: 3px 3px 0px #0047AB; line-height: 1.1; font-size: clamp(24px, 7vw, 60px); }
@@ -89,7 +89,7 @@
             lista.sort((a, b) => b.total - a.total);
             const cuerpo = document.getElementById('cuerpoRanking');
             cuerpo.innerHTML = lista.map(i => {
-                const url = `${mesActual}/${i.nombre.toLowerCase()}/REPORTE_${i.nombre}_${mesActual.toUpperCase()}.html`;
+                const url = `${mesActual}/${i.nombre.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}/reporte_${i.nombre.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}_${mesActual}.html`;
                 return `<tr>
                     <td>${i.nombre}</td>
                     <td style="text-align:right;">
@@ -117,73 +117,51 @@
 
     <div id="contenedor-mensual" class="panel-azul">
         <main id="main-container-mensual"><div id="grupo-men-febrero" class="contenedor-sucursales group-mes-men" style="display: none;">
-    <a href="febrero/ACACIAS/REPORTE_ACACIAS_FEBRERO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
-    <a href="febrero/BARQUISIMETO/REPORTE_BARQUISIMETO_FEBRERO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
-    <a href="febrero/BOSQUE/REPORTE_BOSQUE_FEBRERO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="febrero/CASTAÑO/REPORTE_CASTAÑO_FEBRERO.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
-    <a href="febrero/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_FEBRERO.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
-    <a href="febrero/GUACARA/REPORTE_GUACARA_FEBRERO.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
-    <a href="febrero/IPSFA/REPORTE_IPSFA_FEBRERO.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
-    <a href="febrero/MORA/REPORTE_MORA_FEBRERO.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
-    <a href="febrero/NAGUANAGUA/REPORTE_NAGUANAGUA_FEBRERO.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="febrero/SAN DIEGO/REPORTE_SAN DIEGO_FEBRERO.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="febrero/SAN JUAN/REPORTE_SAN JUAN_FEBRERO.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="febrero/SANTA RITA/REPORTE_SANTA RITA_FEBRERO.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
-    <a href="febrero/TUCACAS/REPORTE_TUCACAS_FEBRERO.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
-    <a href="febrero/VICTORIA/REPORTE_VICTORIA_FEBRERO.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
-    <a href="febrero/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_FEBRERO.html" class="card-sucursal" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+    <a href="febrero/acacias/reporte_acacias_febrero.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="febrero/barquisimeto/reporte_barquisimeto_febrero.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="febrero/bosque/reporte_bosque_febrero.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="febrero/guacara/reporte_guacara_febrero.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="febrero/ipsfa/reporte_ipsfa_febrero.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="febrero/mora/reporte_mora_febrero.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="febrero/naguanagua/reporte_naguanagua_febrero.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="febrero/tucacas/reporte_tucacas_febrero.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="febrero/victoria/reporte_victoria_febrero.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
 </div>
 <div id="grupo-men-marzo" class="contenedor-sucursales group-mes-men" style="display: none;">
-    <a href="marzo/ACACIAS/REPORTE_ACACIAS_MARZO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
-    <a href="marzo/BARQUISIMETO/REPORTE_BARQUISIMETO_MARZO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
-    <a href="marzo/BOSQUE/REPORTE_BOSQUE_MARZO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="marzo/CASTAÑO/REPORTE_CASTAÑO_MARZO.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
-    <a href="marzo/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_MARZO.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
-    <a href="marzo/GUACARA/REPORTE_GUACARA_MARZO.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
-    <a href="marzo/IPSFA/REPORTE_IPSFA_MARZO.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
-    <a href="marzo/MORA/REPORTE_MORA_MARZO.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
-    <a href="marzo/NAGUANAGUA/REPORTE_NAGUANAGUA_MARZO.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="marzo/SAN DIEGO/REPORTE_SAN DIEGO_MARZO.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="marzo/SAN JUAN/REPORTE_SAN JUAN_MARZO.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="marzo/SANTA RITA/REPORTE_SANTA RITA_MARZO.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
-    <a href="marzo/TUCACAS/REPORTE_TUCACAS_MARZO.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
-    <a href="marzo/VICTORIA/REPORTE_VICTORIA_MARZO.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
-    <a href="marzo/VILLAS DE ARAGUA/REPORTE_VILLAS DE ARAGUA_MARZO.html" class="card-sucursal" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
+    <a href="marzo/acacias/reporte_acacias_marzo.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="marzo/barquisimeto/reporte_barquisimeto_marzo.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="marzo/bosque/reporte_bosque_marzo.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="marzo/guacara/reporte_guacara_marzo.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="marzo/ipsfa/reporte_ipsfa_marzo.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="marzo/mora/reporte_mora_marzo.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="marzo/naguanagua/reporte_naguanagua_marzo.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="marzo/tucacas/reporte_tucacas_marzo.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="marzo/victoria/reporte_victoria_marzo.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
 </div>
 <div id="grupo-men-abril" class="contenedor-sucursales group-mes-men" style="display: none;">
-    <a href="abril/ACACIAS/REPORTE_ACACIAS_ABRIL.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
-    <a href="abril/BARQUSIMETO/REPORTE_BARQUSIMETO_ABRIL.html" class="card-sucursal" data-sucursal="BARQUSIMETO">BARQUSIMETO</a>
-    <a href="abril/BOSQUE/REPORTE_BOSQUE_ABRIL.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="abril/CASTAÑO/REPORTE_CASTAÑO_ABRIL.html" class="card-sucursal" data-sucursal="CASTAÑO">CASTAÑO</a>
-    <a href="abril/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_ABRIL.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
-    <a href="abril/GUACARA/REPORTE_GUACARA_ABRIL.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
-    <a href="abril/IPSFA/REPORTE_IPSFA_ABRIL.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
-    <a href="abril/MORA/REPORTE_MORA_ABRIL.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
-    <a href="abril/NAGUANAGUA/REPORTE_NAGUANAGUA_ABRIL.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="abril/SAN DIEGO/REPORTE_SAN DIEGO_ABRIL.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="abril/SAN JUAN/REPORTE_SAN JUAN_ABRIL.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="abril/SANTA RITA/REPORTE_SANTA RITA_ABRIL.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
-    <a href="abril/TUCACAS/REPORTE_TUCACAS_ABRIL.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
-    <a href="abril/VICTORIA/REPORTE_VICTORIA_ABRIL.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
-    <a href="abril/VILLAS/REPORTE_VILLAS_ABRIL.html" class="card-sucursal" data-sucursal="VILLAS">VILLAS</a>
+    <a href="abril/acacias/reporte_acacias_abril.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="abril/barqusimeto/reporte_barqusimeto_abril.html" class="card-sucursal" data-sucursal="BARQUSIMETO">BARQUSIMETO</a>
+    <a href="abril/bosque/reporte_bosque_abril.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="abril/guacara/reporte_guacara_abril.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="abril/ipsfa/reporte_ipsfa_abril.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="abril/mora/reporte_mora_abril.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="abril/naguanagua/reporte_naguanagua_abril.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="abril/tucacas/reporte_tucacas_abril.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="abril/victoria/reporte_victoria_abril.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="abril/villas/reporte_villas_abril.html" class="card-sucursal" data-sucursal="VILLAS">VILLAS</a>
 </div>
 <div id="grupo-men-mayo" class="contenedor-sucursales group-mes-men" style="display: grid;">
-    <a href="mayo/ACACIAS/REPORTE_ACACIAS_MAYO.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
-    <a href="mayo/BARQUISIMETO/REPORTE_BARQUISIMETO_MAYO.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
-    <a href="mayo/BOSQUE/REPORTE_BOSQUE_MAYO.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="mayo/CIRCULO/REPORTE_CIRCULO_MAYO.html" class="card-sucursal" data-sucursal="CIRCULO">CIRCULO</a>
-    <a href="mayo/CIRCULO MILITAR/REPORTE_CIRCULO MILITAR_MAYO.html" class="card-sucursal" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
-    <a href="mayo/GUACARA/REPORTE_GUACARA_MAYO.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
-    <a href="mayo/IPSFA/REPORTE_IPSFA_MAYO.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
-    <a href="mayo/MORA/REPORTE_MORA_MAYO.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
-    <a href="mayo/NAGUANAGUA/REPORTE_NAGUANAGUA_MAYO.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="mayo/SAN DIEGO/REPORTE_SAN DIEGO_MAYO.html" class="card-sucursal" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="mayo/SAN JUAN/REPORTE_SAN JUAN_MAYO.html" class="card-sucursal" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="mayo/SANTA RITA/REPORTE_SANTA RITA_MAYO.html" class="card-sucursal" data-sucursal="SANTA RITA">SANTA RITA</a>
-    <a href="mayo/TUCACAS/REPORTE_TUCACAS_MAYO.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
-    <a href="mayo/VICTORIA/REPORTE_VICTORIA_MAYO.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
-    <a href="mayo/VILLAS/REPORTE_VILLAS_MAYO.html" class="card-sucursal" data-sucursal="VILLAS">VILLAS</a>
-    <a href="mayo/castaño/REPORTE_CASTAÑO_MAYO.html" class="card-sucursal" data-sucursal="CASTAÑO">castaño</a>
+    <a href="mayo/acacias/reporte_acacias_mayo.html" class="card-sucursal" data-sucursal="ACACIAS">ACACIAS</a>
+    <a href="mayo/barquisimeto/reporte_barquisimeto_mayo.html" class="card-sucursal" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
+    <a href="mayo/bosque/reporte_bosque_mayo.html" class="card-sucursal" data-sucursal="BOSQUE">BOSQUE</a>
+    <a href="mayo/circulo/reporte_circulo_mayo.html" class="card-sucursal" data-sucursal="CIRCULO">CIRCULO</a>
+    <a href="mayo/guacara/reporte_guacara_mayo.html" class="card-sucursal" data-sucursal="GUACARA">GUACARA</a>
+    <a href="mayo/ipsfa/reporte_ipsfa_mayo.html" class="card-sucursal" data-sucursal="IPSFA">IPSFA</a>
+    <a href="mayo/mora/reporte_mora_mayo.html" class="card-sucursal" data-sucursal="MORA">MORA</a>
+    <a href="mayo/naguanagua/reporte_naguanagua_mayo.html" class="card-sucursal" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
+    <a href="mayo/tucacas/reporte_tucacas_mayo.html" class="card-sucursal" data-sucursal="TUCACAS">TUCACAS</a>
+    <a href="mayo/victoria/reporte_victoria_mayo.html" class="card-sucursal" data-sucursal="VICTORIA">VICTORIA</a>
+    <a href="mayo/villas/reporte_villas_mayo.html" class="card-sucursal" data-sucursal="VILLAS">VILLAS</a>
 </div>
 </main>
     </div>
@@ -200,49 +178,32 @@
     <a href="#" id="link-sem-febrero-ACACIAS" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="ACACIAS">ACACIAS</a>
     <a href="#" id="link-sem-febrero-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
     <a href="#" id="link-sem-febrero-BOSQUE" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="#" id="link-sem-febrero-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="CASTAÑO">CASTAÑO</a>
-    <a href="#" id="link-sem-febrero-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
     <a href="#" id="link-sem-febrero-GUACARA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="GUACARA">GUACARA</a>
     <a href="#" id="link-sem-febrero-IPSFA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="IPSFA">IPSFA</a>
     <a href="#" id="link-sem-febrero-MORA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="MORA">MORA</a>
     <a href="#" id="link-sem-febrero-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="#" id="link-sem-febrero-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="#" id="link-sem-febrero-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="#" id="link-sem-febrero-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="SANTA RITA">SANTA RITA</a>
     <a href="#" id="link-sem-febrero-TUCACAS" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="TUCACAS">TUCACAS</a>
     <a href="#" id="link-sem-febrero-VICTORIA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="VICTORIA">VICTORIA</a>
-    <a href="#" id="link-sem-febrero-VILLAS DE ARAGUA" class="card-sucursal card-suc-sem" data-mes="febrero" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
 </div>
 <div id="grupo-sem-marzo" class="contenedor-sucursales group-mes-sem" style="display: none;">
     <a href="#" id="link-sem-marzo-ACACIAS" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="ACACIAS">ACACIAS</a>
     <a href="#" id="link-sem-marzo-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
     <a href="#" id="link-sem-marzo-BOSQUE" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="#" id="link-sem-marzo-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="CASTAÑO">CASTAÑO</a>
-    <a href="#" id="link-sem-marzo-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
     <a href="#" id="link-sem-marzo-GUACARA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="GUACARA">GUACARA</a>
     <a href="#" id="link-sem-marzo-IPSFA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="IPSFA">IPSFA</a>
     <a href="#" id="link-sem-marzo-MORA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="MORA">MORA</a>
     <a href="#" id="link-sem-marzo-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="#" id="link-sem-marzo-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="#" id="link-sem-marzo-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="#" id="link-sem-marzo-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="SANTA RITA">SANTA RITA</a>
     <a href="#" id="link-sem-marzo-TUCACAS" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="TUCACAS">TUCACAS</a>
     <a href="#" id="link-sem-marzo-VICTORIA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="VICTORIA">VICTORIA</a>
-    <a href="#" id="link-sem-marzo-VILLAS DE ARAGUA" class="card-sucursal card-suc-sem" data-mes="marzo" data-sucursal="VILLAS DE ARAGUA">VILLAS DE ARAGUA</a>
 </div>
 <div id="grupo-sem-abril" class="contenedor-sucursales group-mes-sem" style="display: none;">
     <a href="#" id="link-sem-abril-ACACIAS" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="ACACIAS">ACACIAS</a>
     <a href="#" id="link-sem-abril-BARQUSIMETO" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="BARQUSIMETO">BARQUSIMETO</a>
     <a href="#" id="link-sem-abril-BOSQUE" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="BOSQUE">BOSQUE</a>
-    <a href="#" id="link-sem-abril-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="CASTAÑO">CASTAÑO</a>
-    <a href="#" id="link-sem-abril-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
     <a href="#" id="link-sem-abril-GUACARA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="GUACARA">GUACARA</a>
     <a href="#" id="link-sem-abril-IPSFA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="IPSFA">IPSFA</a>
     <a href="#" id="link-sem-abril-MORA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="MORA">MORA</a>
     <a href="#" id="link-sem-abril-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="#" id="link-sem-abril-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="#" id="link-sem-abril-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="#" id="link-sem-abril-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="SANTA RITA">SANTA RITA</a>
     <a href="#" id="link-sem-abril-TUCACAS" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="TUCACAS">TUCACAS</a>
     <a href="#" id="link-sem-abril-VICTORIA" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="VICTORIA">VICTORIA</a>
     <a href="#" id="link-sem-abril-VILLAS" class="card-sucursal card-suc-sem" data-mes="abril" data-sucursal="VILLAS">VILLAS</a>
@@ -252,18 +213,13 @@
     <a href="#" id="link-sem-mayo-BARQUISIMETO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="BARQUISIMETO">BARQUISIMETO</a>
     <a href="#" id="link-sem-mayo-BOSQUE" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="BOSQUE">BOSQUE</a>
     <a href="#" id="link-sem-mayo-CIRCULO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="CIRCULO">CIRCULO</a>
-    <a href="#" id="link-sem-mayo-CIRCULO MILITAR" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="CIRCULO MILITAR">CIRCULO MILITAR</a>
     <a href="#" id="link-sem-mayo-GUACARA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="GUACARA">GUACARA</a>
     <a href="#" id="link-sem-mayo-IPSFA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="IPSFA">IPSFA</a>
     <a href="#" id="link-sem-mayo-MORA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="MORA">MORA</a>
     <a href="#" id="link-sem-mayo-NAGUANAGUA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="NAGUANAGUA">NAGUANAGUA</a>
-    <a href="#" id="link-sem-mayo-SAN DIEGO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="SAN DIEGO">SAN DIEGO</a>
-    <a href="#" id="link-sem-mayo-SAN JUAN" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="SAN JUAN">SAN JUAN</a>
-    <a href="#" id="link-sem-mayo-SANTA RITA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="SANTA RITA">SANTA RITA</a>
     <a href="#" id="link-sem-mayo-TUCACAS" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="TUCACAS">TUCACAS</a>
     <a href="#" id="link-sem-mayo-VICTORIA" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="VICTORIA">VICTORIA</a>
     <a href="#" id="link-sem-mayo-VILLAS" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="VILLAS">VILLAS</a>
-    <a href="#" id="link-sem-mayo-CASTAÑO" class="card-sucursal card-suc-sem" data-mes="mayo" data-sucursal="CASTAÑO">castaño</a>
 </div>
 </main>
     </div>
@@ -383,7 +339,7 @@
             } else {
                 ulRanking.innerHTML = listaSucs.map((s, index) => `
                     <li class="item-ranking-lateral">
-                        <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
+                        <span><span class="posicion-ranking">#${index+1}</span>${s.nombre.replace(/_/g, ' ')}</span>
                         <span class="badge-incidencias">${s.total}</span>
                     </li>
                 `).join('');
@@ -399,7 +355,7 @@
             let todasLasSucs = Array.from(new Set([...Object.keys(sucsMesActual), ...Object.keys(sucsMesAnterior)])).sort();
 
             todasLasSucs.forEach(suc => {
-                labels.push(suc.toUpperCase());
+                labels.push(suc.toUpperCase().replace(/_/g, ' '));
                 datosAnt.push(sucsMesAnterior[suc] || 0);
                 datosAct.push(sucsMesActual[suc] || 0);
             });
@@ -442,7 +398,7 @@
             const ulRankingSem = document.getElementById('ranking-lateral-semanal');
             ulRankingSem.innerHTML = listaSucsSem.map((s, index) => `
                 <li class="item-ranking-lateral">
-                    <span><span class="posicion-ranking">#${index+1}</span>${s.nombre}</span>
+                    <span><span class="posicion-ranking">#${index+1}</span>${s.nombre.replace(/_/g, ' ')}</span>
                     <span class="badge-incidencias">${s.total}</span>
                 </li>
             `).join('');
@@ -454,7 +410,7 @@
             let todasLasSucsSem = Array.from(new Set([...Object.keys(incidenciasSemanaActual), ...Object.keys(incidenciasSemanaAnterior)])).sort();
 
             todasLasSucsSem.forEach(suc => {
-                labels.push(suc.toUpperCase());
+                labels.push(suc.toUpperCase().replace(/_/g, ' '));
                 
                 let valAnt = incidenciasSemanaAnterior[suc] || 0;
                 if (typeof valAnt === 'object' && valAnt !== null) valAnt = valAnt.incidencias || 0;
@@ -583,16 +539,16 @@
             const tarjetas = document.querySelectorAll(`#grupo-sem-${mesAct} .card-suc-sem`);
             tarjetas.forEach(tarjeta => {
                 const sucUpper = tarjeta.getAttribute('data-sucursal');
-                let rawVal = incidenciasSemana[sucUpper.toLowerCase()] || incidenciasSemana[sucUpper] || 0;
+                let rawVal = incidenciasSemana[sucUpper] || incidenciasSemana[sucUpper.replace(/_/g, ' ')] || 0;
                 if (typeof rawVal === 'object' && rawVal !== null) {
                     rawVal = rawVal.incidencias || 0;
                 }
                 const totalIncidencias = Number(rawVal) || 0;
                 
-                tarjeta.href = `${mesAct}/${sucUpper.toLowerCase()}/REPORTE_${sucUpper}_${mesAct.toUpperCase()}_${semanaActual.toUpperCase()}.html`;
+                tarjeta.href = `${mesAct}/${sucUpper.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}/reporte_${sucUpper.toLowerCase().replace(/ /g, '_').replace(/ñ/g, 'n')}_${mesAct}_${semanaActual.toLowerCase()}.html`;
                 
-                // CAMBIO SOLICITADO: Solo se renderiza el nombre de la sucursal limpio
-                tarjeta.innerHTML = `${sucUpper.toLowerCase()}`;
+                // Limpiamos el texto que se muestra en la tarjeta
+                tarjeta.innerHTML = `${sucUpper.toLowerCase().replace(/_/g, ' ')}`;
                 
                 if(totalIncidencias === 0) {
                     tarjeta.style.background = "#00B0F0";
