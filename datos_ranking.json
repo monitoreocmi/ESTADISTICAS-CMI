@@ -327,20 +327,14 @@
             "CIRCULO MILITAR": 88,
             "GUACARA": 21,
             "IPSFA": 26,
-            "LA_VICTORIA": 0,
             "MORA": 24,
             "NAGUANAGUA": 35,
             "SAN DIEGO": 95,
             "SAN JUAN": 69,
             "SANTA RITA": 38,
-            "SANTA_RITA": 0,
-            "SAN_DIEGO": 0,
-            "SAN_JUAN": 0,
-            "SUCURSALES": 0,
             "TUCACAS": 9,
             "VICTORIA": 70,
-            "VILLAS": 13,
-            "VILLAS DE ARAGUA": 14
+            "VILLAS": 14
         },
         "semanas_incidencias": {
             "semana1": {
@@ -352,20 +346,14 @@
                 "CIRCULO MILITAR": 21,
                 "GUACARA": 2,
                 "IPSFA": 6,
-                "LA_VICTORIA": 0,
                 "MORA": 3,
                 "NAGUANAGUA": 6,
                 "SAN DIEGO": 10,
                 "SAN JUAN": 9,
                 "SANTA RITA": 5,
-                "SANTA_RITA": 0,
-                "SAN_DIEGO": 0,
-                "SAN_JUAN": 0,
-                "SUCURSALES": 0,
                 "TUCACAS": 1,
                 "VICTORIA": 14,
-                "VILLAS": 2,
-                "VILLAS DE ARAGUA": 2
+                "VILLAS": 2
             },
             "semana2": {
                 "ACACIAS": 3,
@@ -376,20 +364,14 @@
                 "CIRCULO MILITAR": 17,
                 "GUACARA": 4,
                 "IPSFA": 6,
-                "LA_VICTORIA": 0,
                 "MORA": 3,
                 "NAGUANAGUA": 4,
                 "SAN DIEGO": 19,
                 "SAN JUAN": 8,
                 "SANTA RITA": 15,
-                "SANTA_RITA": 0,
-                "SAN_DIEGO": 0,
-                "SAN_JUAN": 0,
-                "SUCURSALES": 0,
                 "TUCACAS": 0,
                 "VICTORIA": 16,
-                "VILLAS": 4,
-                "VILLAS DE ARAGUA": 4
+                "VILLAS": 4
             },
             "semana3": {
                 "ACACIAS": 5,
@@ -400,20 +382,14 @@
                 "CIRCULO MILITAR": 19,
                 "GUACARA": 2,
                 "IPSFA": 5,
-                "LA_VICTORIA": 0,
                 "MORA": 3,
                 "NAGUANAGUA": 6,
                 "SAN DIEGO": 16,
                 "SAN JUAN": 30,
                 "SANTA RITA": 9,
-                "SANTA_RITA": 0,
-                "SAN_DIEGO": 0,
-                "SAN_JUAN": 0,
-                "SUCURSALES": 0,
                 "TUCACAS": 2,
                 "VICTORIA": 18,
-                "VILLAS": 3,
-                "VILLAS DE ARAGUA": 3
+                "VILLAS": 3
             },
             "semana4": {
                 "ACACIAS": 3,
@@ -424,20 +400,14 @@
                 "CIRCULO MILITAR": 7,
                 "GUACARA": 5,
                 "IPSFA": 4,
-                "LA_VICTORIA": 0,
                 "MORA": 1,
                 "NAGUANAGUA": 4,
                 "SAN DIEGO": 19,
                 "SAN JUAN": 4,
                 "SANTA RITA": 3,
-                "SANTA_RITA": 0,
-                "SAN_DIEGO": 0,
-                "SAN_JUAN": 0,
-                "SUCURSALES": 0,
                 "TUCACAS": 0,
                 "VICTORIA": 8,
-                "VILLAS": 2,
-                "VILLAS DE ARAGUA": 2
+                "VILLAS": 2
             },
             "semana5": {
                 "ACACIAS": 6,
@@ -448,20 +418,14 @@
                 "CIRCULO MILITAR": 24,
                 "GUACARA": 8,
                 "IPSFA": 5,
-                "LA_VICTORIA": 0,
                 "MORA": 14,
                 "NAGUANAGUA": 15,
                 "SAN DIEGO": 31,
                 "SAN JUAN": 18,
                 "SANTA RITA": 6,
-                "SANTA_RITA": 0,
-                "SAN_DIEGO": 0,
-                "SAN_JUAN": 0,
-                "SUCURSALES": 0,
                 "TUCACAS": 6,
                 "VICTORIA": 14,
-                "VILLAS": 2,
-                "VILLAS DE ARAGUA": 3
+                "VILLAS": 3
             }
         }
     }
