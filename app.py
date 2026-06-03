@@ -154,8 +154,8 @@ def guardar_apertura_cierre():
 
 # --- CONFIGURACIONES ---
 MESES_ORDENADOS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
-SUCURSALES_GOURMET = ["BOSQUE", "CIRCULO MILITAR", "SAN DIEGO", "GUACARA", "IPSFA", "NAGUANAGUA", "TUCACAS", "SAN RITA", "CASTAÑO"]
-SUCURSALES_TODAS = ["ACACIAS", "BARQUISIMETO", "BOSQUE", "CIRCULO MILITAR", "SAN DIEGO", "GUACARA", "IPSFA", "NAGUANAGUA", "TUCACAS", "SAN RITA", "CASTAÑO", "MORA", "SAN JUAN", "VICTORIA", "VILLAS DE ARAGUA"]
+SUCURSALES_GOURMET = ["BOSQUE", "CIRCULO MILITAR", "SAN DIEGO", "GUACARA", "IPSFA", "NAGUANAGUA", "TUCACAS", "SANTA RITA", "CASTAÑO"]
+SUCURSALES_TODAS = ["ACACIAS", "BARQUISIMETO", "BOSQUE", "CIRCULO MILITAR", "SAN DIEGO", "GUACARA", "IPSFA", "NAGUANAGUA", "TUCACAS", "SANTA RITA", "CASTAÑO", "MORA", "SAN JUAN", "VICTORIA", "VILLAS DE ARAGUA"]
 INCIDENCIAS_CONFIG = [{"cod": "CNG", "desc": "Colas no gestionadas"}, {"cod": "NZA", "desc": "Neveras ó zonas sin abastecer"}, {"cod": "DPAC", "desc": "Zonas desabastecidas por el personal prev"}, {"cod": "AMSA", "desc": "Apertura de muelle a deshoras sin autorización"}, {"cod": "ODAAAP", "desc": "Obstaculización de tránsito a clientes y acceso a productos"}, {"cod": "CAH", "desc": "Cierres antes de la hora"}, {"cod": "APH", "desc": "Aperturas posterior a la hora"}, {"cod": "ASP", "desc": "Exhibición o área sin personal"}, {"cod": "UIH", "desc": "Uso indebido de herramientas"}, {"cod": "AF", "desc": "Anaquel Frenteado"}, {"cod": "MSP", "desc": "Mantenimiento sin perímetro"}, {"cod": "FFG", "desc": "Falla frigorífica"}, {"cod": "NSI", "desc": "Neveras sin iluminación"}, {"cod": "GSA", "desc": "Gourmet sin abastecer"}]
 
 if not os.path.exists(CARPETA_CAPTURAS): os.makedirs(CARPETA_CAPTURAS)
