@@ -1,0 +1,59 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'><title>MALOS PROCESOS</title><style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f6f9; color: #333; }
+    .banner-container { background: white; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 5px solid #ffcc00; }
+    .banner-logo { height: 40px; }
+    .banner-title { color: #003399; font-weight: 800; font-size: 20px; letter-spacing: 1px; }
+    .main-header { background: #2c3e50; padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; color: white; }
+    .selector-mes { padding: 8px 15px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .nav-tabs-main { display: flex; justify-content: center; background: white; padding: 15px 0; gap: 10px; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .tab-btn { padding: 10px 20px; border: none; background: #edf2f7; color: #4a5568; cursor: pointer; border-radius: 20px; font-weight: bold; text-transform: uppercase; font-size: 12px; transition: all 0.2s; }
+    .tab-btn.active { background: #3182ce; color: white; box-shadow: 0 2px 5px rgba(49, 130, 206, 0.3); }
+    .grid-sucursales { display: flex; flex-wrap: wrap; justify-content: center; padding: 30px; gap: 25px; }
+    .sucursal-card { width: 310px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; }
+    .sucursal-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    .card-header { background: #3182ce; color: white; padding: 15px; text-align: center; font-weight: bold; text-transform: uppercase; }
+    .card-body { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+    .monto-total { color: #e53e3e; font-size: 26px; font-weight: bold; margin: 5px 0; }
+    .select-incidencia { width: 100%; padding: 10px; border-radius: 8px; font-size: 13px; color: #4a5568; border: 1px solid #cbd5e0; cursor: pointer; }
+    .btn-detalles { display: block; background: #2d3748; color: white; text-align: center; padding: 11px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 12px; margin-top: auto; transition: background 0.2s; }
+    .btn-detalles:hover { background: #1a202c; }
+    .table-container { padding: 25px; background: white; margin: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .data-table th { background: #3182ce; color: white; padding: 12px; border: 1px solid #e2e8f0; text-transform: uppercase; }
+    .data-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: center; }
+    .btn-volver { background: #4a5568; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; display: inline-block; margin: 20px 0 0 30px; font-weight: bold; font-size: 13px; }
+    .matriz-excel-table { width: 100%; border-collapse: collapse; font-size: 11px; background: #fff; min-width: 1000px; }
+    .matriz-excel-header th { background: #3182ce; color: white; font-weight: bold; text-transform: uppercase; border: 1px solid #2b6cb0; padding: 12px 10px; text-align: center; }
+    .matriz-excel-table tr:not(.matriz-excel-header) td { padding: 8px 12px; border: 1px solid #e2e8f0; text-align: center; white-space: nowrap; color: #2d3748; }
+    .matriz-excel-table tr:not(.matriz-excel-header):hover { background-color: #f7fafc; }
+    .matriz-excel-table tr.matriz-total-row td { background: #edf2f7; font-weight: bold; color: #1a202c; border-top: 2px solid #cbd5e0; }
+    .podio-container { display: flex; justify-content: center; align-items: flex-end; gap: 20px; margin: 40px auto 20px; max-width: 800px; padding-bottom: 20px; }
+    .podio-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .podio-1 { order: 2; width: 220px; height: 215px; border-top: 5px solid #d69e2e; }
+    .podio-2 { order: 1; width: 190px; height: 185px; border-top: 5px solid #a0aec0; }
+    .podio-3 { order: 3; width: 190px; height: 165px; border-top: 5px solid #ed8936; }
+    .podio-medal { font-size: 24px; margin-bottom: 5px; }
+    .podio-name { font-weight: bold; font-size: 15px; color: #2d3748; }
+    .podio-meta { font-size: 12px; color: #718096; margin-top: 5px; }
+    .galeria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; padding: 15px; }
+    .galeria-card { background: #1e293b; border-radius: 10px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; }
+    .galeria-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.25); border-color: #475569; }
+    .galeria-img-container { width: 100%; height: 150px; background: #0f172a; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .galeria-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .galeria-card:hover .galeria-img { transform: scale(1.05); }
+    .galeria-info { padding: 12px; text-align: center; background: #1e293b; display: flex; flex-direction: column; gap: 8px; justify-content: center; align-items: center; }
+    .galeria-badge { background: #e2e8f0; color: #1e293b; font-size: 11px; padding: 3px 10px; border-radius: 12px; font-weight: bold; display: inline-block; width: fit-content; }
+    .galeria-btn-ver { font-size: 11px; color: #38bdf8; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .modal-foto { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.9); align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+    .modal-content { max-width: 85%; max-height: 85%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #475569; }
+</style></head><body>
+                
+    <div class="banner-container">
+        <img src="RECURSOS/logo.png" class="banner-logo" alt="Logo Luxor">
+        <span class="banner-title"></span>
+        <img src="RECURSOS/logo.png" class="banner-logo" alt="Logo Luxor">
+    </div>
+                <div class='main-header'><h1>GUACARA - FILTRO: MALOS PROCESOS</h1></div>
+                <a href='../../index.html?mes=MAYO' class='btn-volver'>← VOLVER AL PANEL</a>
+                <div class='table-container'><table class='data-table'><thead><tr><th>FECHA</th><th>PRODUCTO</th><th>CANTIDAD</th><th>N° FACTURA</th><th>VALOR $</th><th>ALERTA / INCIDENCIA</th><th>DESCRIPCIÓN</th><th>HORA</th><th>MONITORISTA</th><th>REGISTRO FOTOGRÁFICO</th></tr></thead><tbody><tr><td>2026-05-04</td><td>AJO PORRO</td><td>890G</td><td>64761</td><td>$1.74</td><td>MALOS PROCESOS</td><td>MALA FACTURACION POR ERROR DE CODIGO, FACTURARON CEBOLLIN, EL CLIENTE DECIDE REFACTURAR, ANA SANCHEZ CAJA 17</td><td>09:59:00</td><td>YARELYS RIVAS</td><td><a href="../../FOTOS/nan" target="_blank" style="color:#3182ce; font-weight:bold; text-decoration:none;">ABRIR FOTO</a></td></tr><tr><td>2026-05-16</td><td>VARIOS</td><td>3</td><td>93563</td><td>$2.60</td><td>MALOS PROCESOS</td><td>PRODUCTOS QUE FUERON CONSUMIDOS Y DEJADOS EN CAJA CANCELADOS POR SUPERVISOR DE CAJA JUAN GARCIA  </td><td>22:15:00</td><td>ALEJANDRO MARIN</td><td><a href="../../FOTOS/nan" target="_blank" style="color:#3182ce; font-weight:bold; text-decoration:none;">ABRIR FOTO</a></td></tr></tbody></table></div>
+            </body></html>
